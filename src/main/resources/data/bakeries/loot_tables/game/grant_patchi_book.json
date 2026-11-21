@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "patchouli"
+      ]
+    }
+  ],
+  "type": "minecraft:advancement_reward",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "patchouli:guide_book",
+          "functions": [
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{\"patchouli:book\": \"bakeries:baking_guide\"}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

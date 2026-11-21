@@ -1,0 +1,50 @@
+{
+  "replace": false,
+  "values": [
+    "bakeries:oven",
+    "bakeries:salt_ore",
+    "bakeries:deepslate_salt_ore",
+    "bakeries:fermentation_tank",
+    "bakeries:yeast_tank",
+    "bakeries:cheese_tank",
+    "bakeries:milk_tank",
+    "bakeries:glass_cabinet_door",
+    {
+      "id": "bakeries:glass_cabinet_door_two",
+      "required": false
+    },
+    "bakeries:raw_salt_block",
+    {
+      "id": "bakeries:black_white_concrete",
+      "required": false
+    },
+    "bakeries:blender",
+    "bakeries:moka_pot",
+    "bakeries:moka_pot_fill",
+    "bakeries:mix_block",
+    "bakeries:mould",
+    {
+      "id": "bakeries:mould_two",
+      "required": false
+    },
+    "bakeries:cash_register_computer",
+    {
+      "id": "bakeries:stone_kiln",
+      "required": false
+    },
+    {
+      "id": "bakeries:luminous_light_sign",
+      "required": false
+    },
+    "bakeries:toaster",
+    {
+      "id": "bakeries:chandelier",
+      "required": false
+    },
+    "bakeries:fermentation_box",
+    {
+      "id": "bakeries:magnetic_plate",
+      "required": false
+    }
+  ]
+}

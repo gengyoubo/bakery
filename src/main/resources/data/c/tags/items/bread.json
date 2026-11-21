@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "bakeries:sliced_toast",
+    "bakeries:bake_sliced_toast",
+    "bakeries:round_bread"
+  ]
+}

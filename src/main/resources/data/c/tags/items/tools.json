@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "bakeries:bread_knife",
+    "bakeries:flour_sieve",
+    {
+      "id": "bakeries:stone_kiln_shovel",
+      "required": false
+    },
+    {
+      "id": "bakeries:netherite_bread_knife",
+      "required": false
+    }
+  ]
+}

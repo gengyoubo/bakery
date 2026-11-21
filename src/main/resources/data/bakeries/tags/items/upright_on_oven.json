@@ -1,0 +1,29 @@
+{
+  "replace": false,
+  "values": [
+    "bakeries:mould_toast_dough",
+    {
+      "id": "bakeries:mould_toast",
+      "required": false
+    },
+    "bakeries:mould_cheese_cocoa_toast_dough",
+    {
+      "id": "bakeries:mould_cheese_cocoa_toast",
+      "required": false
+    },
+    "bakeries:ciabatta_dough",
+    "bakeries:ciabatta",
+    "bakeries:country_bread_dough",
+    "bakeries:country_bread",
+    {
+      "id": "bakeries:mould_pound_cake_paste",
+      "required": false
+    },
+    {
+      "id": "bakeries:mould_pound_cake",
+      "required": false
+    },
+    "bakeries:baguette_dough",
+    "bakeries:baguette"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "bakeries:bread_knife",
+    {
+      "id": "bakeries:netherite_bread_knife",
+      "required": false
+    }
+  ]
+}

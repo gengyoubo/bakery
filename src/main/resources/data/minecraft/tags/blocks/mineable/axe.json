@@ -1,0 +1,25 @@
+{
+  "replace": false,
+  "values": [
+    "bakeries:wood_counter",
+    "bakeries:dough_crafting_table",
+    "bakeries:bread_basket",
+    "bakeries:cupboard",
+    "bakeries:menu",
+    "bakeries:wood_tray",
+    {
+      "id": "bakeries:tray_scone",
+      "required": false
+    },
+    {
+      "id": "bakeries:bread_holders",
+      "required": false
+    },
+    "bakeries:sofa_white",
+    "bakeries:sofa_red",
+    "bakeries:sofa_light_gray",
+    "bakeries:coffee_table",
+    "bakeries:bread_rack",
+    "bakeries:glass_bread_rack"
+  ]
+}

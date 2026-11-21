@@ -10,6 +10,8 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.DropExperienceBlock;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -21,6 +23,7 @@ public final class BakeriesBlocks {
     public static final Block CHEESE_CREAM_BREAD;
     public static final Block RAW_SALT_BLOCK;
     public static final Block SALT_ORE;
+    public static final Block DEEPSLATE_SALT_ORE;
     public static final Block DIRTY_CHOCO_CROISSANT;
     public static final Block FLOUR_BAG;
     public static final Block MEAT_FLOSS_BREAD_ROLL;
@@ -48,8 +51,9 @@ public final class BakeriesBlocks {
         DIRTY_CHOCO_CROISSANT = register("dirty_choco_croissant", new StateBlocks.FacingPileBlock(BlockBehaviour.Properties.of().strength(3.5F).noOcclusion(), 4));
         CHEESE_CREAM_BREAD = register("cheese_cream_bread", new StateBlocks.FacingPileBlock(BlockBehaviour.Properties.of().strength(3.5F).noOcclusion(), 4));
         CASH_REGISTER_COMPUTER = register("cash_register_computer", new StateBlocks.LitFacingBlock(BlockBehaviour.Properties.of().strength(3.5F).noOcclusion()));
-        RAW_SALT_BLOCK = register("raw_salt_block", new MachineBlocks.FacingMachineBlock(BlockBehaviour.Properties.of().strength(3.5F).noOcclusion()));
-        SALT_ORE = register("salt_ore", new MachineBlocks.FacingMachineBlock(BlockBehaviour.Properties.of().strength(3.5F).noOcclusion()));
+        RAW_SALT_BLOCK = register("raw_salt_block", new Block(BlockBehaviour.Properties.copy(Blocks.STONE)));
+        SALT_ORE = register("salt_ore", new DropExperienceBlock(BlockBehaviour.Properties.of().mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(3.0F, 3.0F)));
+        DEEPSLATE_SALT_ORE = register("deepslate_salt_ore", new DropExperienceBlock(BlockBehaviour.Properties.copy(SALT_ORE).mapColor(MapColor.DEEPSLATE).strength(4.5F, 3.0F).sound(SoundType.DEEPSLATE)));
         OVEN = register("oven", new MachineBlocks.FacingMachineBlock(BlockBehaviour.Properties.of().strength(3.5F).noOcclusion()));
         TOASTER = register("toaster", new StateBlocks.ToasterBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).noOcclusion()));
         BLENDER = register("blender", new MachineBlocks.BlenderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(3.5F, 3.5F).requiresCorrectToolForDrops().sound(SoundType.METAL).noOcclusion().isRedstoneConductor((state, level, pos) -> false)));

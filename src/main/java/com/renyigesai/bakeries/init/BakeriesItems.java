@@ -167,7 +167,7 @@ public final class BakeriesItems {
         TOMATO = registerBlock("tomato", BakeriesBlocks.TOMATO, food(2, 0.5F, false));
         RAW_SALT_BLOCK = registerBlock("raw_salt_block", BakeriesBlocks.RAW_SALT_BLOCK);
         SALT_ORE = registerBlock("salt_ore", BakeriesBlocks.SALT_ORE);
-        DEEPSLATE_SALT_ORE = register("deepslate_salt_ore");
+        DEEPSLATE_SALT_ORE = registerBlock("deepslate_salt_ore", BakeriesBlocks.DEEPSLATE_SALT_ORE);
         BAKERIES_TAB = Registry.register(
                 BuiltInRegistries.CREATIVE_MODE_TAB,
                 new ResourceLocation(BakeriesMod.MODID, "main"),
