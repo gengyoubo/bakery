@@ -324,7 +324,7 @@
   "tooltips.bakeries.player_logged_in": "§6[Bakeries]§fInstall Patchouli to obtain the mod tutorial book",
   "tooltips.bakeries.repeat_eat_item_drink": "Drink",
   "tooltips.bakeries.repeat_eat_item_eat": "Eat",
-  "tooltips.bakeries.row_item_temperature": "Min %s \u00B0c",
+  "tooltips.bakeries.row_item_temperature": "Min %s °c",
   "tooltips.bakeries.shake": "Right shake",
   "tooltips.bakeries.toaster_0": "Right-click with your left hand to start baking",
   "tooltips.bakeries.toaster_1": "%s and right-click to retrieve the item",
@@ -338,5 +338,10 @@
   "overlay.bakeries.bread_knife_hint": "Bread knife machine",
   "overlay.bakeries.cupboard_hint": "Storage: 3x7 slots",
   "overlay.bakeries.flour_sieve_hint": "Flour sieve machine",
-  "overlay.bakeries.drink_hint": "Drink machine"
+  "overlay.bakeries.drink_hint": "Drink machine",
+  "effect.bakeries.berry_sour": "Berry Sour",
+  "effect.bakeries.berry_sour.description": "The damage dealt to creatures in rain or water is increased by 1.5 times, and there is a 20% chance of lightning being summoned.",
+  "effect.bakeries.tea_astringent": "Tea Astringent",
+  "effect.bakeries.tea_astringent.description": "Centered on itself, force all entities within the range to decelerate.",
+  "entity.minecraft.villager.pistrinamaster": "Pistrina Master"
 }

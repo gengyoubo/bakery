@@ -5,6 +5,8 @@ import com.renyigesai.bakeries.BakeriesMod;
 import com.renyigesai.bakeries.init.BakeriesBlocks;
 import com.renyigesai.bakeries.init.BakeriesItems;
 import com.renyigesai.bakeries.init.BakeriesRecipeTypes;
+import com.renyigesai.bakeries.init.BakeriesSounds;
+import net.minecraft.sounds.SoundSource;
 import com.renyigesai.bakeries.init.blocks.StateBlocks;
 import com.renyigesai.bakeries.init.blocks.ToasterState;
 import com.renyigesai.bakeries.menu.BlenderMenu;
@@ -898,7 +900,15 @@ public class MachineBlockEntity extends BlockEntity implements ImplementedInvent
             return;
         }
         if (getBlockState().hasProperty(StateBlocks.ToasterBlock.STATE)) {
+            ToasterState previous = getBlockState().getValue(StateBlocks.ToasterBlock.STATE);
             level.setBlock(worldPosition, getBlockState().setValue(StateBlocks.ToasterBlock.STATE, state), 3);
+            if (previous != state && !level.isClientSide) {
+                if (state == ToasterState.LIT) {
+                    level.playSound(null, worldPosition, BakeriesSounds.TOASTER_IN, SoundSource.BLOCKS, 1.0F, 1.0F);
+                } else if (state == ToasterState.FINISH) {
+                    level.playSound(null, worldPosition, BakeriesSounds.TOASTER_OUT, SoundSource.BLOCKS, 1.0F, 1.0F);
+                }
+            }
         }
     }
 

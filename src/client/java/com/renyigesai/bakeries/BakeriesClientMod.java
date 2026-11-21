@@ -9,6 +9,9 @@ import com.renyigesai.bakeries.key.BakeriesKeyMapping;
 import com.renyigesai.bakeries.init.BakeriesBlocks;
 import com.renyigesai.bakeries.init.BakeriesBlockEntities;
 import com.renyigesai.bakeries.init.BakeriesMenuTypes;
+import com.renyigesai.bakeries.init.BakeriesParticleTypes;
+import com.renyigesai.bakeries.client.particle.TomatoSauceParticle;
+import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import com.renyigesai.bakeries.renderer.MokaPotBlockEntityRenderer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.api.ClientModInitializer;
@@ -28,6 +31,7 @@ public final class BakeriesClientMod implements ClientModInitializer {
         MenuScreens.register(BakeriesMenuTypes.CUPBOARD, CupboardScreen::new);
         BlockEntityRenderers.register(BakeriesBlockEntities.MACHINE, MokaPotBlockEntityRenderer::new);
         BakeriesKeyMapping.init();
+        ParticleFactoryRegistry.getInstance().register(BakeriesParticleTypes.TOMATO_SAUCE, TomatoSauceParticle.Provider::new);
     }
 
     private static void registerRenderLayers() {

@@ -4,6 +4,12 @@ import com.renyigesai.bakeries.init.*;
 import com.renyigesai.bakeries.common.loot.BakeriesLootHooks;
 import com.renyigesai.bakeries.network.Messages;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
+import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.levelgen.GenerationStep;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,12 +41,20 @@ public final class BakeriesMod implements ModInitializer {
     @Override
     public void onInitialize() {
         BakeriesConfig.init();
+        BakeriesSounds.init();
+        BakeriesParticleTypes.init();
         BakeriesBlocks.init();
         BakeriesBlockEntities.init();
         BakeriesMenuTypes.init();
         BakeriesRecipeTypes.init();
         BakeriesMobEffects.init();
         BakeriesItems.init();
+        BakeriesVillagers.init();
+        BiomeModifications.addFeature(
+                BiomeSelectors.foundInOverworld(),
+                GenerationStep.Decoration.UNDERGROUND_ORES,
+                ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(MODID, "ore_salt"))
+        );
         BakeriesLootHooks.init();
         Messages.init();
         BakeriesCommands.init();

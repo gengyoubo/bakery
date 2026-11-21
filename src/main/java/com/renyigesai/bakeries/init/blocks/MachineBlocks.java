@@ -3,7 +3,12 @@ package com.renyigesai.bakeries.init.blocks;
 import com.renyigesai.bakeries.block.entity.MachineBlockEntity;
 import com.renyigesai.bakeries.capabilities.PlayerKeyAuxiliary;
 import com.renyigesai.bakeries.init.BakeriesBlocks;
+import com.renyigesai.bakeries.init.BakeriesSounds;
 import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
@@ -76,6 +81,7 @@ public final class MachineBlocks {
                     }
                     machine.setItem(4, ItemStack.EMPTY);
                     machine.setChanged();
+                    level.playSound(null, pos, BakeriesSounds.INSERT_STRAW, SoundSource.BLOCKS, 1.0F, 1.0F);
                     return InteractionResult.CONSUME;
                 }
                 ItemStack held = player.getItemInHand(hand);
@@ -88,6 +94,7 @@ public final class MachineBlocks {
                             machine.setItem(i, copy);
                             held.shrink(1);
                             machine.setChanged();
+                            level.playSound(null, pos, copy.getItem() instanceof BlockItem ? BakeriesSounds.PUT_ON_ICE : SoundEvents.BOTTLE_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
                             return InteractionResult.CONSUME;
                         }
                     }
@@ -115,6 +122,9 @@ public final class MachineBlocks {
                     }
                     return InteractionResult.CONSUME;
                 }
+                if (state.is(BakeriesBlocks.OVEN)) {
+                    level.playSound(null, pos, BakeriesSounds.OVEN_OPEN, SoundSource.BLOCKS, 1.0F, 1.0F);
+                }
                 serverPlayer.openMenu(provider);
             }
             return InteractionResult.CONSUME;
@@ -136,7 +146,7 @@ public final class MachineBlocks {
 
         @Override
         public BlockState getStateForPlacement(BlockPlaceContext context) {
-            return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+            return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection());
         }
     }
 
@@ -150,6 +160,13 @@ public final class MachineBlocks {
         protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
             super.createBlockStateDefinition(builder);
             builder.add(BlockStateProperties.POWERED);
+        }
+
+        @Override
+        public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+            if (state.getValue(BlockStateProperties.POWERED)) {
+                level.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, BakeriesSounds.BLENDER, SoundSource.BLOCKS, 1.0F, 1.0F, false);
+            }
         }
     }
 }

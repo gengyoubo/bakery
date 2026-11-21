@@ -4,6 +4,9 @@ import com.renyigesai.bakeries.BakeriesMod;
 import com.renyigesai.bakeries.common.potion.BakeriesMobEffect;
 import com.renyigesai.bakeries.common.potion.CocoaManiaMobEffect;
 import com.renyigesai.bakeries.common.potion.EnjoyMobEffect;
+import com.renyigesai.bakeries.common.potion.BerrySourMobEffect;
+import com.renyigesai.bakeries.common.potion.SoftMobEffect;
+import com.renyigesai.bakeries.common.potion.TeaAstringentMobEffect;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -35,6 +38,14 @@ public final class BakeriesMobEffects {
             )
     );
     public static final MobEffect ENJOY = register("enjoy", new EnjoyMobEffect());
+    public static final MobEffect SOFT = register(
+            "soft",
+            new SoftMobEffect()
+                    .addAttributeModifier(Attributes.KNOCKBACK_RESISTANCE, "e561bed7-8068-42e6-a010-d25e2ac47f71", 0.5D, AttributeModifier.Operation.ADDITION)
+                    .addAttributeModifier(Attributes.ARMOR, "8a296c1d-b2e2-41e9-96df-b49e4f6370cf", 5.0D, AttributeModifier.Operation.ADDITION)
+    );
+    public static final MobEffect BERRY_SOUR = register("berry_sour", new BerrySourMobEffect());
+    public static final MobEffect TEA_ASTRINGENT = register("tea_astringent", new TeaAstringentMobEffect());
 
     private BakeriesMobEffects() {
     }
