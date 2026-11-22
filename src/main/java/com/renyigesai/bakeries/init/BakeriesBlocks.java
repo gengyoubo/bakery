@@ -3,6 +3,10 @@ package com.renyigesai.bakeries.init;
 import com.renyigesai.bakeries.BakeriesMod;
 import com.renyigesai.bakeries.common.blocks.menu.MenuBlock;
 import com.renyigesai.bakeries.common.blocks.sofa.SofaBlock;
+import com.renyigesai.bakeries.common.cake.CakeBoxBlock;
+import com.renyigesai.bakeries.common.cake.CakeRollProcessingBlock;
+import com.renyigesai.bakeries.common.cake.CustomCakeBlock;
+import com.renyigesai.bakeries.common.cake.SiliconePaperBlock;
 import com.renyigesai.bakeries.init.blocks.FoodBlocks;
 import com.renyigesai.bakeries.init.blocks.MachineBlocks;
 import com.renyigesai.bakeries.init.blocks.StateBlocks;
@@ -48,6 +52,11 @@ public final class BakeriesBlocks {
     public static final Block CAKE_BASE, RED_VELVET_CAKE_BASE, CREAM_CAKE, MULTI_LAYER_CREAM_CAKE, TIRAMISU, CARROT_CAKE,
             RED_VELVET_CAKE, MATCHA_CAKE, BASQUE_CAKE, NIANGAO_CAKE, TARO_CAKE, POUND_CAKE, CUP_CAKE, PAPER_CUP, SILICONE_PAPER,
             MOULD_TWO, MOULD_CAKE_BASE, MOULD_CARROT_CAKE, MOULD_RED_VELVET_CAKE, MOULD_MATCHA_CAKE, MOULD_BASQUE_CAKE, MOULD_POUND_CAKE;
+    // Ported from Forge 1.3.6: cake system (part 2)
+    public static final Block CUSTOM_CAKE, CAKE_ROLL_PROCESSING, CAKE_BOX;
+    // Ported from Forge 1.3.6: stone kiln + pizza
+    public static final Block STONE_KILN, PIZZA_FLATBREAD, RAW_PIZZA, PIZZA, SAUSAGE_PIZZA, MEAT_PASTE_PIZZA, CUSTOM_PIZZA;
+    public static final Block MOONCAKE, PORK_MOONCAKE, YUNTUI_MOONCAKE, TRAY_YUNTUI_MOONCAKE;
     static {
         CAKE_BASE = register("cake_base", cake(5, 0.4F));
         RED_VELVET_CAKE_BASE = register("red_velvet_cake_base", cake(5, 0.4F));
@@ -67,7 +76,22 @@ public final class BakeriesBlocks {
         POUND_CAKE = register("pound_cake", new StateBlocks.ToastBlock(BlockBehaviour.Properties.of().sound(BakeriesSounds.PASTRY).strength(0.5F, 0.5F).noOcclusion()));
         PAPER_CUP = register("paper_cup", new FoodBlocks.PaperCupBlock(BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).noOcclusion(),
                 () -> BakeriesItems.CAKE_PASTE_BUCKET, () -> BakeriesItems.PAPER_CUP_CAKE_PASTE));
-        SILICONE_PAPER = register("silicone_paper", new FoodBlocks.ShapedFacingBlock(BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).strength(0.1F).noOcclusion(), Block.box(1, 0, 1, 15, 1, 15)));
+        SILICONE_PAPER = register("silicone_paper", new SiliconePaperBlock(BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).strength(0.1F).noOcclusion()));
+        CUSTOM_CAKE = register("custom_cake", new CustomCakeBlock(BlockBehaviour.Properties.copy(Blocks.CAKE).noOcclusion()));
+        CAKE_ROLL_PROCESSING = register("cake_roll_processing", new CakeRollProcessingBlock(cakeProperties()));
+        CAKE_BOX = register("cake_box", new CakeBoxBlock(BlockBehaviour.Properties.of().strength(0.1F).sound(SoundType.WOOD).noOcclusion()));
+        STONE_KILN = register("stone_kiln", new com.renyigesai.bakeries.common.kiln.StoneKilnBlock(BlockBehaviour.Properties.copy(Blocks.BRICKS)
+                .lightLevel(state -> state.getValue(com.renyigesai.bakeries.common.kiln.StoneKilnBlock.LIT) ? 15 : 0).noOcclusion()));
+        PIZZA_FLATBREAD = register("pizza_flatbread", new com.renyigesai.bakeries.common.pizza.PizzaFlatbreadBlock(BlockBehaviour.Properties.copy(Blocks.CAKE).noOcclusion()));
+        RAW_PIZZA = register("raw_pizza", new com.renyigesai.bakeries.common.pizza.PizzaBlocks.RawPizzaBlock(BlockBehaviour.Properties.copy(Blocks.CAKE).noOcclusion(), () -> BakeriesItems.RAW_PIZZA));
+        PIZZA = register("pizza", new com.renyigesai.bakeries.common.pizza.PizzaBlocks.PizzaBlock(BlockBehaviour.Properties.copy(Blocks.CAKE).noOcclusion(), 2, 0.1F));
+        SAUSAGE_PIZZA = register("sausage_pizza", new com.renyigesai.bakeries.common.pizza.PizzaBlocks.PizzaBlock(BlockBehaviour.Properties.copy(Blocks.CAKE).noOcclusion(), 2, 0.1F));
+        MEAT_PASTE_PIZZA = register("meat_paste_pizza", new com.renyigesai.bakeries.common.pizza.PizzaBlocks.PizzaBlock(BlockBehaviour.Properties.copy(Blocks.CAKE).noOcclusion(), 2, 0.1F));
+        CUSTOM_PIZZA = register("custom_pizza", new com.renyigesai.bakeries.common.pizza.PizzaBlocks.CustomPizzaBlock(BlockBehaviour.Properties.copy(Blocks.CAKE).noOcclusion()));
+        MOONCAKE = register("mooncake", new com.renyigesai.bakeries.common.mooncake.MooncakeBlock(BlockBehaviour.Properties.of().strength(0.5F, 0.5F).sound(BakeriesSounds.PASTRY).noOcclusion().isRedstoneConductor((s, l, p) -> false)));
+        PORK_MOONCAKE = register("pork_mooncake", new StateBlocks.FacingPileBlock(BlockBehaviour.Properties.of().sound(BakeriesSounds.PASTRY).strength(0.5F, 0.5F).noOcclusion(), 4));
+        YUNTUI_MOONCAKE = register("yuntui_mooncake", new StateBlocks.FacingPileBlock(BlockBehaviour.Properties.of().sound(BakeriesSounds.PASTRY).strength(0.5F, 0.5F).noOcclusion(), 4));
+        TRAY_YUNTUI_MOONCAKE = register("tray_yuntui_mooncake", new FoodBlocks.ShapedFacingBlock(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS).noOcclusion(), Block.box(2, 0, 2, 14, 2, 14)));
         MOULD_TWO = register("mould_two", new StateBlocks.MouldBlock(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(0.5F, 0.5F).noOcclusion(), Block.box(2, 0, 2, 14, 7, 14)));
         MOULD_CAKE_BASE = register("mould_cake_base", mouldCake(() -> BakeriesItems.CAKE_BASE));
         MOULD_CARROT_CAKE = register("mould_carrot_cake", mouldCake(() -> BakeriesItems.CARROT_CAKE));

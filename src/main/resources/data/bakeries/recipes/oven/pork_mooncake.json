@@ -1,0 +1,14 @@
+{
+  "type": "bakeries:oven",
+  "ingredient": {
+    "item": "bakeries:raw_pork_mooncake"
+  },
+  "min": 170,
+  "max": 180,
+  "perfect": 180,
+  "result": {
+    "count": 1,
+    "item": "bakeries:pork_mooncake"
+  },
+  "time": 200
+}

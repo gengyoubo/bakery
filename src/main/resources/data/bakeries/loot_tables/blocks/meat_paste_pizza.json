@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "bonus_rolls": 0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        },
+        {
+          "condition": "minecraft:block_state_property",
+          "block": "bakeries:meat_paste_pizza",
+          "properties": {
+            "slice": "0"
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "bakeries:meat_paste_pizza"
+        }
+      ]
+    }
+  ],
+  "random_sequence": "bakeries:blocks/meat_paste_pizza"
+}

@@ -1,7 +1,7 @@
 # Bakeries Fabric 移植 TODO
 
 对照基准：`bakeries-1.20.1-forge-1.3.6.jar`（Forge 1.3.6）。
-最后更新：2026-11-22。
+最后更新：2026-11-22（石窑和披萨完成后）。
 
 ## 已完成（这一轮移植里做过的，供参考）
 
@@ -17,30 +17,19 @@
 - [x] 机器分面物品接口（漏斗、Fabric Transfer API）；烤箱/搅拌机/醒发箱打开音效
 - [x] 第一批零散内容（27 个物品/方块 + 31 个配方），吐司模具脱模流程
 - [x] 烤箱 6 格同时烘烤
+- [x] 蛋糕系统（第一部分）：13 种蛋糕方块、模具蛋糕与脱模、纸杯/纸杯蛋糕、切片、面糊与液体桶、硅油纸（+29 个配方）
+- [x] 蛋糕系统（第二部分）：自定义蛋糕（19 个蛋糕部件数据，蜡烛/命名）、蛋糕卷加工与蛋糕卷、蛋糕盒，以及对应的方块实体渲染器
+- [x] 石窑 + 披萨：石窑（分阶段烘烤、炉铲翻面、烟熏炉配方也能烤、看向提示）、炉铲、饼底制作、生披萨、三种披萨、自定义披萨（+9 个配方）
+- [x] 食物堆叠：手持同种物品右键叠高、空手右键取回（所有堆叠方块）
+- [x] 占位贴图：粗盐、抹茶蛋糕面糊、南瓜馅（Forge jar 里也没有，等正式美术替换同名 png）
 
-## 1. 还没移植的内容（约 70 个注册 ID）
+## 1. 还没移植的内容（约 20 个注册 ID）
 
-### 蛋糕系统（最大的一块）
-- [ ] 蛋糕方块：`cake_base`、`cream_cake`、`multi_layer_cream_cake`、`custom_cake`、`tiramisu`、`pound_cake`、`carrot_cake`、`red_velvet_cake`、`red_velvet_cake_base`、`matcha_cake`、`basque_cake`、`taro_cake`、`niangao_cake`
-- [ ] 切块/切片：`cream_cake_cube`、`cut_cake_base`、`soak_coffee_cut_cake_base`、`sliced_pound_cake`
-- [ ] 蛋糕卷：`cake_roll`、`cake_roll_processing`、`cream_cake_processing`
-- [ ] 纸杯蛋糕：`paper_cup`、`paper_cup_cake_paste`、`cup_cake`
-- [ ] 蛋糕盒：`cake_box`（含 `cake_box_bluepink` 变体）
-- [ ] 模具与面糊：`mould_two`、`mould_cake_base`/`mould_cake_paste`、`mould_carrot_cake`/`_paste`、`mould_red_velvet_cake`/`_paste`、`mould_matcha_cake`/`_paste`、`mould_pound_cake`/`_paste`、`mould_basque_cake`/`_paste`
-- [ ] 液体桶：`cake_paste_bucket`、`egg_yolk_paste_bucket`、`foamed_protein_bucket`
-- [ ] 其他：`silicone_paper`、`cocoa_cream`
-- [ ] 数据：`data/bakeries/cake_parts/` 共 19 个蛋糕部件
-- [ ] 做完后：柔软效果的食物来源（纸杯蛋糕、蛋糕卷、奶油蛋糕块、芋泥蛋糕）
-
-### 石窑 + 披萨
-- [ ] `stone_kiln`、`stone_kiln_shovel`
-- [ ] `pizza_flatbread`、`raw_pizza`、`pizza`、`sausage_pizza`、`meat_paste_pizza`、`custom_pizza`、`raw_custom_pizza`
-- [ ] 配方类型 `bakeries:stone_kiln`（Forge 有 6 个配方：法棍、恰巴塔、乡村面包、佛卡夏、披萨、自定义披萨）
-- [ ] 联动标签：`create:passive_boiler_heaters`、`farmersdelight:heat_sources`（都是石窑）
-
-### 月饼
-- [ ] `raw_mooncake`、`mooncake`、`raw_pork_mooncake`、`pork_mooncake`、`raw_yuntui_mooncake`、`yuntui_mooncake`、`tray_yuntui_mooncake`
-- [ ] 配方类型 `bakeries:mooncake`；圆形模具（`round_mould`，已移植）的实际用途在这里
+### 月饼（代码已完成，编译通过；还没跑 gametest，也没进游戏看过）
+- [x] `raw_mooncake`、`mooncake`、`raw_pork_mooncake`、`pork_mooncake`、`raw_yuntui_mooncake`、`yuntui_mooncake`、`tray_yuntui_mooncake`
+- [x] 配方类型 `bakeries:mooncake`（圆形模具 + 面粉 + 蜂蜜瓶 + 最多 6 个食物当馅料），烤箱保留馅料
+- [ ] 待验证：合成、烘烤保留馅料、吃月饼触发馅料效果、叠放/取回、送给其他玩家
+- 注：`tray_yuntui_mooncake` 在 Forge 里既没有配方也没有掉落表，Fabric 给它加了掉落自身，并像 `tray_scone` 一样合成后返还木托盘
 
 ### 晒盐
 - [ ] `baysalt_frame`、`salt_water_bucket`（盐水流体）、`salt_bucket`、`salt_scraper_rake`
@@ -55,19 +44,22 @@
 
 ## 2. 和 Forge 行为不一致
 
-- [ ] **食物堆叠放置**：Forge 手持同种面包右键已放置的面包会叠高（`pile` 1→4）；Fabric 的 `FacingPileBlock` 只能放 `pile=1`，没有叠放逻辑
+- [ ] **食物堆叠放置**：已做叠高和取回；Forge 放置需要按住辅助键，Fabric 保留了直接放置（有意保留）
+- [ ] **用面包刀切方块**：Forge 可以直接切蛋糕胚、吐司、磅蛋糕方块；Fabric 只能切掉在地上的物品（走面包刀配方）
+- [ ] **搅拌机吞桶**：蛋糕糊桶配方会消耗两个液体桶且不返还空桶（未确认 Forge 是否相同）
 - [ ] **法棍**：Forge 法棍可以吃 4 口，同时是 3 点伤害的武器；Fabric 是普通食物
 - [ ] **生面团温度提示**：Forge 的 `RawItem` 会显示"最低 xx°C"；Fabric 生面团是普通物品
 - [ ] **饮品**：Forge 饮品可以放到地上（`coldDrinkBlock`），喝完返还饮料杯，喝饮品还能刷新村民交易；Fabric 饮品是普通食物，不能放置
 - [ ] **玻璃面包架开门**：Forge 有 `open` 状态和门的渲染
 - [ ] **机器动画**：烤箱、醒发箱、搅拌机开门/运转动画（Forge 靠方块实体渲染器）
 - [ ] **橱柜**：Fabric 21 格，Forge 27 格（可能是有意改动，待确认）
+- [ ] **披萨配方类型**：Forge 的 `bakeries:pizza`（按配料组合出固定披萨）没移植；Forge jar 里也没有这类配方，香肠/肉酱披萨两边都只能从创造模式拿
 - [ ] **配置**：Forge 的 `fermentationGameplay` 等配置项；Fabric 写死为 `true`
 
 ## 3. 客户端与联动
 
-- [ ] 方块实体渲染器：面包架、玻璃面包架、烤箱、木托盘、搅拌机、醒发箱、蛋糕盒等（目前只有摩卡壶有）
-- [ ] JEI：缺石窑、拆模两个分类
+- [ ] 方块实体渲染器：面包架、玻璃面包架、烤箱、木托盘、搅拌机、醒发箱等（已有：摩卡壶、自定义蛋糕、蛋糕卷加工、蛋糕盒）
+- [ ] JEI：缺石窑、拆模两个分类（石窑配方类型已经有了）
 - [ ] Jade 插件
 - [ ] 内置资源包：`b_2d_icon`、`b_gui`、`b_xiris`（目前只有 `b_16x`）
 - [ ] 结构：面包店 `bakery.nbt`
@@ -75,7 +67,7 @@
 
 ## 4. 资源与语言
 
-- [ ] 贴图缺失（Forge jar 里本来就没有）：`textures/item/coarse_salt.png`、`textures/item/pumpkin_stuffing.png`（生南瓜派用）
+- [ ] 正式美术：粗盐、抹茶蛋糕面糊、南瓜馅目前是生成的占位图
 - [ ] 繁体中文：没有 `zh_tw.json`（Forge 有）
 - [ ] zh_cn 还缺约 220 个键，大部分属于未移植内容，随内容一起补
 - [ ] lzh：新增物品中有 11 个名称 Forge 也没有，目前回退为英文
@@ -94,3 +86,6 @@
 - [ ] 新世界里盐矿的生成
 - [ ] 面包师村民就职、贴图、交易
 - [ ] 方块放置朝向、沙发/面包架连接的实际观感
+- [ ] 自定义蛋糕（方块、物品、放进蛋糕盒）的部件模型渲染；蛋糕部件物品的"可用作蛋糕部件"提示
+- [ ] 蛋糕卷加工台上的食材显示、蛋糕盒里物品的显示位置
+- [ ] 石窑里物品的位置/变大/翻面动画、看向石窑时的进度条；饼底上配料和奶酪的摆放

@@ -534,6 +534,9 @@ public class MachineBlockEntity extends BlockEntity implements ImplementedInvent
         }
         ItemStack result = recipe.getResultItem(level.registryAccess()).copy();
         result.setCount(Math.min(result.getMaxStackSize(), Math.max(1, result.getCount()) * amount));
+        if (input.is(BakeriesItems.RAW_MOONCAKE)) {
+            com.renyigesai.bakeries.common.mooncake.MooncakeItem.copyFillings(input, result);
+        }
         if (recipe.getPerfectTemperature() >= 0 && ovenTemperature == recipe.getPerfectTemperature()) {
             addLore(result, "tooltips.bakeries.pile_item_perfect");
         }

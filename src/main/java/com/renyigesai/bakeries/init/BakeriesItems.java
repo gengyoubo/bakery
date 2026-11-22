@@ -10,6 +10,9 @@ import com.renyigesai.bakeries.items.FlourSieveItem;
 import com.renyigesai.bakeries.items.WholeEggItem;
 import com.renyigesai.bakeries.items.EternalBaguetteItem;
 import com.renyigesai.bakeries.items.ContainerFoodBlockItem;
+import com.renyigesai.bakeries.common.cake.CakeBoxItem;
+import com.renyigesai.bakeries.common.cake.CakeRollItem;
+import com.renyigesai.bakeries.common.cake.CustomCakeItem;
 import com.renyigesai.bakeries.items.GarlicBaguetteItem;
 import com.renyigesai.bakeries.items.MouldBlockItem;
 import com.renyigesai.bakeries.items.RepeatEatBlockItem;
@@ -54,6 +57,11 @@ public final class BakeriesItems {
             CREAM_CAKE_CUBE, CUT_CAKE_BASE, SOAK_COFFEE_CUT_CAKE_BASE, SLICED_POUND_CAKE, PAPER_CUP_CAKE_PASTE, COCOA_CREAM,
             MOULD_CAKE_PASTE, MOULD_CARROT_CAKE_PASTE, MOULD_RED_VELVET_CAKE_PASTE, MOULD_MATCHA_CAKE_PASTE, MOULD_POUND_CAKE_PASTE,
             MOULD_BASQUE_CAKE_PASTE, CAKE_PASTE_BUCKET, EGG_YOLK_PASTE_BUCKET, FOAMED_PROTEIN_BUCKET;
+    // Ported from Forge 1.3.6: cake system (part 2)
+    public static final Item CUSTOM_CAKE, CAKE_ROLL, CAKE_BOX;
+    // Ported from Forge 1.3.6: stone kiln + pizza
+    public static final Item STONE_KILN, STONE_KILN_SHOVEL, PIZZA_FLATBREAD, RAW_PIZZA, PIZZA, SAUSAGE_PIZZA, MEAT_PASTE_PIZZA, CUSTOM_PIZZA, RAW_CUSTOM_PIZZA;
+    public static final Item RAW_MOONCAKE, MOONCAKE, RAW_PORK_MOONCAKE, PORK_MOONCAKE, RAW_YUNTUI_MOONCAKE, YUNTUI_MOONCAKE, TRAY_YUNTUI_MOONCAKE;
     static {
         BREAD_KNIFE = register("bread_knife", new BreadKnifeItem(new Item.Properties().durability(250)));
         BAKING_GUIDE = register("baking_guide", new BreadKnifeItem(new Item.Properties().durability(250)));
@@ -266,6 +274,36 @@ public final class BakeriesItems {
         CAKE_PASTE_BUCKET = register("cake_paste_bucket", new Item.Properties().stacksTo(1).craftRemainder(Items.BUCKET));
         EGG_YOLK_PASTE_BUCKET = register("egg_yolk_paste_bucket", new Item.Properties().stacksTo(1).craftRemainder(Items.BUCKET));
         FOAMED_PROTEIN_BUCKET = register("foamed_protein_bucket", new Item.Properties().stacksTo(1).craftRemainder(Items.BUCKET));
+        CUSTOM_CAKE = register("custom_cake", new CustomCakeItem(BakeriesBlocks.CUSTOM_CAKE, new Item.Properties().stacksTo(1).rarity(BakeriesRarity.ADVANCED)));
+        CAKE_ROLL = register("cake_roll", new CakeRollItem(food(12, 0.3F, true, effect(BakeriesMobEffects.SOFT, 60, 0)).stacksTo(1).rarity(BakeriesRarity.ADVANCED),
+                effect(BakeriesMobEffects.SOFT, 60, 0)));
+        CAKE_BOX = register("cake_box", new CakeBoxItem(BakeriesBlocks.CAKE_BOX, new Item.Properties().stacksTo(1)));
+        STONE_KILN = registerBlock("stone_kiln", BakeriesBlocks.STONE_KILN);
+        STONE_KILN_SHOVEL = register("stone_kiln_shovel", new com.renyigesai.bakeries.common.kiln.StoneKilnShovelItem(new Item.Properties()));
+        PIZZA_FLATBREAD = registerBlock("pizza_flatbread", BakeriesBlocks.PIZZA_FLATBREAD);
+        RAW_PIZZA = registerBlock("raw_pizza", BakeriesBlocks.RAW_PIZZA, new Item.Properties().stacksTo(16));
+        PIZZA = registerBlock("pizza", BakeriesBlocks.PIZZA);
+        SAUSAGE_PIZZA = registerBlock("sausage_pizza", BakeriesBlocks.SAUSAGE_PIZZA);
+        MEAT_PASTE_PIZZA = registerBlock("meat_paste_pizza", BakeriesBlocks.MEAT_PASTE_PIZZA);
+        CUSTOM_PIZZA = register("custom_pizza", new com.renyigesai.bakeries.common.pizza.CustomPizzaItem(BakeriesBlocks.CUSTOM_PIZZA,
+                new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)));
+        // a plain item (Forge made it a second block item of raw_pizza, which hijacked that block's item)
+        RAW_CUSTOM_PIZZA = register("raw_custom_pizza", new Item(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)) {
+            @Override
+            public void appendHoverText(ItemStack stack, @org.jetbrains.annotations.Nullable net.minecraft.world.level.Level level,
+                                        java.util.List<Component> tooltip, net.minecraft.world.item.TooltipFlag flag) {
+                com.renyigesai.bakeries.common.pizza.CustomPizzaItem.appendToppings(stack, tooltip);
+            }
+        });
+
+        RAW_MOONCAKE = register("raw_mooncake", new com.renyigesai.bakeries.common.mooncake.MooncakeItem.Raw(new Item.Properties().stacksTo(16)));
+        MOONCAKE = register("mooncake", new com.renyigesai.bakeries.common.mooncake.MooncakeItem(BakeriesBlocks.MOONCAKE,
+                food(6, 0.5F, false, effect(BakeriesMobEffects.ENJOY, 30, 0)).stacksTo(16), effect(BakeriesMobEffects.ENJOY, 30, 0)));
+        RAW_PORK_MOONCAKE = register("raw_pork_mooncake");
+        PORK_MOONCAKE = registerBlock("pork_mooncake", BakeriesBlocks.PORK_MOONCAKE, food(6, 0.5F, false));
+        RAW_YUNTUI_MOONCAKE = register("raw_yuntui_mooncake");
+        YUNTUI_MOONCAKE = registerBlock("yuntui_mooncake", BakeriesBlocks.YUNTUI_MOONCAKE, food(3, 1.0F, false));
+        TRAY_YUNTUI_MOONCAKE = registerBlock("tray_yuntui_mooncake", BakeriesBlocks.TRAY_YUNTUI_MOONCAKE, new Item.Properties().stacksTo(1).craftRemainder(WOOD_TRAY));
 
         BAKERIES_TAB = Registry.register(
                 BuiltInRegistries.CREATIVE_MODE_TAB,
@@ -413,7 +451,11 @@ public final class BakeriesItems {
                 MOULD_CAKE_BASE, MOULD_CARROT_CAKE, MOULD_RED_VELVET_CAKE, MOULD_MATCHA_CAKE, MOULD_BASQUE_CAKE, MOULD_POUND_CAKE,
                 CAKE_BASE, RED_VELVET_CAKE_BASE, CUT_CAKE_BASE, SOAK_COFFEE_CUT_CAKE_BASE,
                 CREAM_CAKE, CREAM_CAKE_CUBE, TIRAMISU, CARROT_CAKE, RED_VELVET_CAKE, MATCHA_CAKE, BASQUE_CAKE, NIANGAO_CAKE, TARO_CAKE,
-                POUND_CAKE, SLICED_POUND_CAKE, CUP_CAKE
+                POUND_CAKE, SLICED_POUND_CAKE, CUP_CAKE, CAKE_ROLL, CUSTOM_CAKE, CAKE_BOX,
+
+                STONE_KILN, STONE_KILN_SHOVEL, PIZZA_FLATBREAD, RAW_PIZZA, RAW_CUSTOM_PIZZA, PIZZA, SAUSAGE_PIZZA, MEAT_PASTE_PIZZA, CUSTOM_PIZZA,
+
+                RAW_MOONCAKE, MOONCAKE, RAW_PORK_MOONCAKE, PORK_MOONCAKE, RAW_YUNTUI_MOONCAKE, YUNTUI_MOONCAKE, TRAY_YUNTUI_MOONCAKE
         };
     }
 

@@ -50,6 +50,7 @@ public final class BakeriesMod implements ModInitializer {
         BakeriesMobEffects.init();
         BakeriesItems.init();
         BakeriesVillagers.init();
+        com.renyigesai.bakeries.common.cake.CakeParts.init();
         BiomeModifications.addFeature(
                 BiomeSelectors.foundInOverworld(),
                 GenerationStep.Decoration.UNDERGROUND_ORES,

@@ -1,0 +1,16 @@
+{
+  "type": "bakeries:stone_kiln",
+  "ingredients": [
+    {
+      "item": "bakeries:country_bread_dough"
+    }
+  ],
+  "output": {
+    "item": "bakeries:country_bread",
+    "count": 1
+  },
+  "cooking_time": [
+    50,
+    50
+  ]
+}

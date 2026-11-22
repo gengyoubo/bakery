@@ -28,6 +28,7 @@ public final class BakeriesRecipeTypes {
     public static final RecipeType<SimpleMachineRecipe> FLOUR_SIEVE = registerType("flour_sieve");
     public static final RecipeType<CoffeeRecipe> COFFEE = registerType("coffee");
     public static final RecipeType<SimpleMachineRecipe> FERMENTATION_BOX = registerType("fermentation_box");
+    public static final RecipeType<com.renyigesai.bakeries.recipe.StoneKilnRecipe> STONE_KILN = registerType("stone_kiln");
 
     public static final RecipeSerializer<SimpleMachineRecipe> OVEN_SERIALIZER = registerSerializer("oven",
             new SimpleMachineRecipe.Serializer((id, ingredient, result, count) ->
@@ -53,6 +54,12 @@ public final class BakeriesRecipeTypes {
     public static final RecipeSerializer<SimpleMachineRecipe> FERMENTATION_BOX_SERIALIZER = registerSerializer("fermentation_box",
             new SimpleMachineRecipe.Serializer((id, ingredient, result, count) ->
                     new SimpleMachineRecipe(id, ingredient, result, count, FERMENTATION_BOX_ID, FERMENTATION_BOX_ID)));
+
+    public static final RecipeSerializer<com.renyigesai.bakeries.recipe.StoneKilnRecipe> STONE_KILN_SERIALIZER = registerSerializer("stone_kiln",
+            new com.renyigesai.bakeries.recipe.StoneKilnRecipe.Serializer());
+
+    public static final RecipeSerializer<com.renyigesai.bakeries.recipe.MooncakeRecipe> MOONCAKE_SERIALIZER = registerSerializer("mooncake",
+            new net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer<>(com.renyigesai.bakeries.recipe.MooncakeRecipe::new));
 
     private BakeriesRecipeTypes() {
     }

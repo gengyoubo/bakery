@@ -32,6 +32,8 @@ public final class BakeriesClientMod implements ClientModInitializer {
         BlockEntityRenderers.register(BakeriesBlockEntities.MACHINE, MokaPotBlockEntityRenderer::new);
         BakeriesKeyMapping.init();
         ParticleFactoryRegistry.getInstance().register(BakeriesParticleTypes.TOMATO_SAUCE, TomatoSauceParticle.Provider::new);
+        com.renyigesai.bakeries.client.cake.CakeClient.init();
+        com.renyigesai.bakeries.client.kiln.KilnClient.init();
     }
 
     private static void registerRenderLayers() {
@@ -103,7 +105,21 @@ public final class BakeriesClientMod implements ClientModInitializer {
                 BakeriesBlocks.MOULD_RED_VELVET_CAKE,
                 BakeriesBlocks.MOULD_MATCHA_CAKE,
                 BakeriesBlocks.MOULD_BASQUE_CAKE,
-                BakeriesBlocks.MOULD_POUND_CAKE
+                BakeriesBlocks.MOULD_POUND_CAKE,
+                BakeriesBlocks.CUSTOM_CAKE,
+                BakeriesBlocks.CAKE_ROLL_PROCESSING,
+                BakeriesBlocks.CAKE_BOX,
+                BakeriesBlocks.STONE_KILN,
+                BakeriesBlocks.PIZZA_FLATBREAD,
+                BakeriesBlocks.RAW_PIZZA,
+                BakeriesBlocks.PIZZA,
+                BakeriesBlocks.SAUSAGE_PIZZA,
+                BakeriesBlocks.MEAT_PASTE_PIZZA,
+                BakeriesBlocks.CUSTOM_PIZZA,
+                BakeriesBlocks.MOONCAKE,
+                BakeriesBlocks.PORK_MOONCAKE,
+                BakeriesBlocks.YUNTUI_MOONCAKE,
+                BakeriesBlocks.TRAY_YUNTUI_MOONCAKE
         );
     }
 }
