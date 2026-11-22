@@ -8,6 +8,15 @@ import com.renyigesai.bakeries.items.FoodEffectItem;
 import com.renyigesai.bakeries.items.FoodEffectTooltip;
 import com.renyigesai.bakeries.items.FlourSieveItem;
 import com.renyigesai.bakeries.items.WholeEggItem;
+import com.renyigesai.bakeries.items.EternalBaguetteItem;
+import com.renyigesai.bakeries.items.ContainerFoodBlockItem;
+import com.renyigesai.bakeries.items.GarlicBaguetteItem;
+import com.renyigesai.bakeries.items.MouldBlockItem;
+import com.renyigesai.bakeries.items.RepeatEatBlockItem;
+import com.renyigesai.bakeries.items.RoundMouldItem;
+import net.minecraft.world.item.RecordItem;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.Tiers;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.core.Registry;
@@ -32,6 +41,19 @@ public final class BakeriesItems {
     public static final CreativeModeTab SEMI_FINISHED_PRODUCT_TAB;
     public static final Item FLOUR, WHOLE_WHEAT_FLOUR, COCOA_POWDER, MATCHA_POWDER, SALT, BOTTLE_YEAST, BOTTLE_MILK, BOTTLE_CREAM, BOTTLE_BUTTER, BUTTER_CUBE, FOAMED_CREAM, CHEESE_CREAM, BUTTER_FLOUR_SAND, HONEY_BUTTER, WHOLE_EGG, RAW_PROTEIN, RAW_EGG_YOLK, SALT_YOLK, CHEESE_CUBE, FRESH_CHEESE_CUBE, BROWN_SUGAR_CUBE, COFFEE_BEAN, GROUND_COFFEE, MOKA_POT_FILL, BEARNAISE, OLIVE_OIL, MEAT_FLOSS, ICE_CUBES, SCONE, OLIVE, TARO, COOKED_TARO, MASHED_TARO, SLICED_TOAST, BAKE_SLICED_TOAST, HONEY_BUTTER_SPREAD_TOAST, SLICED_CHEESE_COCOA_TOAST, COUNTRY_BREAD_SLICE, HONEY_BUTTER_SPREAD_COUNTRY_BREAD, BROWN_SUGAR_LATTE, ICED_AMERICAN, ICED_LATTE, MATCHA_LATTE, ORANGE_AMERICAN, TARO_MILK, SWEET_DOUGH, COCOA_DOUGH, SALTED_DOUGH, WHOLE_WHEAT_DOUGH, COCOA_DOUGH_FERMENTATION, SALTED_DOUGH_FERMENTATION, SWEET_DOUGH_FERMENTATION, WHOLE_WHEAT_DOUGH_FERMENTATION, PASTRY, EGG_TART_SHELL, RAW_EGG_TART, BAGEL_DOUGH, WHOLE_WHEAT_BAGEL_DOUGH, ROUND_BREAD_DOUGH, BROWN_SUGAR_ROLL_DOUGH, PINEAPPLE_BUN_DOUGH, CROISSANT_DOUGH, SALT_CROISSANT_DOUGH, BAGUETTE_DOUGH, CIABATTA_DOUGH, FOCACCIA_DOUGH, COUNTRY_BREAD_DOUGH, MOULD_TOAST_DOUGH, MOULD_CHEESE_COCOA_TOAST_DOUGH, RICE_BREAD_DOUGH, OVEN, TOASTER, BLENDER, FERMENTATION_BOX, FERMENTATION_TANK, DOUGH_CRAFTING_TABLE, CUPBOARD, WOOD_COUNTER, COFFEE_TABLE, CHEESE_TANK, MILK_TANK, YEAST_TANK, MOKA_POT, BREAD_RACK, GLASS_BREAD_RACK, BREAD_BASKET, GLASS_CABINET_DOOR, MENU, MOULD, DRINK_CUP, TOAST, CHEESE_COCOA_TOAST, BAGEL, BAGUETTE, CROISSANT, ROUND_BREAD, RICE_BREAD, WHOLE_WHEAT_BAGEL, PINEAPPLE_BUN, FOCACCIA, CIABATTA, EGG_TART, SALT_CROISSANT, COUNTRY_BREAD, CREAM_BINGLE_COFFEE, MATCHA_PARFAIT, COFFEE_PLANT, TOMATO, MIX_BLOCK, BAGEL_FILLED_SAUCE, BAGUETTE_WITH_FILLING, BAKING_GUIDE, BERRY_BAGEL, BREAD_KNIFE, CASH_REGISTER_COMPUTER, CHEESE_CREAM_BREAD, DEEPSLATE_SALT_ORE, DIRTY_CHOCO_CROISSANT, DOUGH_CRAFTING, FLAT_CROISSANT, FLOUR_BAG, FLOUR_SIEVE, MEAT_FLOSS_BREAD_ROLL, PINEAPPLE_OIL, RAW_COFFEE_BEAN, RAW_SALT_BLOCK, SALT_ORE, SOFA_LIGHT_GRAY, SOFA_RED, SOFA_WHITE, TARO_SALT_YOLK_BREAD, TOMATO_CHEESE_CROISSANT_SANDWICH, WHOLE_WHEAT_FLOUR_BAG, WOOD_TRAY;
     public static final Item BROWN_SUGAR_ROLL;
+    // Ported from Forge 1.3.6 (scattered foods, tools and kitchen blocks)
+    public static final Item BERRY_BREAD, BERRY_BREAD_DOUGH, GARLIC_FLAVORED_BAGUETTE, SALMON_SANDWICH, DONGPO_PORK_HAMBURG,
+            CREAM_MUSHROOM_SOUP_WITH_BAGUETTE, BUTTER_LATTE, MILK_TEA, SWEET_BERRIES_JAM, BOXED_EGG, LONG_EGG_TART,
+            CREAM_PUMPKIN_PIE, CREAM_PUMPKIN_PIE_DOUGH, RAW_PUMPKIN_PIE, RAW_TARE_CRUST, CRISPY_DOUGH, SCONE_DOUGH, COARSE_SALT,
+            TRAY_SCONE, BREAD_HOLDERS, BLACK_WHITE_CONCRETE, MOULD_TOAST, MOULD_CHEESE_COCOA_TOAST,
+            ETERNAL_BAGUETTE, NETHERITE_BREAD_KNIFE, ROUND_MOULD, MUSIC_DISC_BAKING_IN_PROGRESS;
+    // Ported from Forge 1.3.6: cake system (part 1)
+    public static final Item CAKE_BASE, RED_VELVET_CAKE_BASE, CREAM_CAKE, TIRAMISU, CARROT_CAKE, RED_VELVET_CAKE, MATCHA_CAKE,
+            BASQUE_CAKE, NIANGAO_CAKE, TARO_CAKE, POUND_CAKE, CUP_CAKE, PAPER_CUP, SILICONE_PAPER, MOULD_TWO,
+            MOULD_CAKE_BASE, MOULD_CARROT_CAKE, MOULD_RED_VELVET_CAKE, MOULD_MATCHA_CAKE, MOULD_BASQUE_CAKE, MOULD_POUND_CAKE,
+            CREAM_CAKE_CUBE, CUT_CAKE_BASE, SOAK_COFFEE_CUT_CAKE_BASE, SLICED_POUND_CAKE, PAPER_CUP_CAKE_PASTE, COCOA_CREAM,
+            MOULD_CAKE_PASTE, MOULD_CARROT_CAKE_PASTE, MOULD_RED_VELVET_CAKE_PASTE, MOULD_MATCHA_CAKE_PASTE, MOULD_POUND_CAKE_PASTE,
+            MOULD_BASQUE_CAKE_PASTE, CAKE_PASTE_BUCKET, EGG_YOLK_PASTE_BUCKET, FOAMED_PROTEIN_BUCKET;
     static {
         BREAD_KNIFE = register("bread_knife", new BreadKnifeItem(new Item.Properties().durability(250)));
         BAKING_GUIDE = register("baking_guide", new BreadKnifeItem(new Item.Properties().durability(250)));
@@ -168,6 +190,83 @@ public final class BakeriesItems {
         RAW_SALT_BLOCK = registerBlock("raw_salt_block", BakeriesBlocks.RAW_SALT_BLOCK);
         SALT_ORE = registerBlock("salt_ore", BakeriesBlocks.SALT_ORE);
         DEEPSLATE_SALT_ORE = registerBlock("deepslate_salt_ore", BakeriesBlocks.DEEPSLATE_SALT_ORE);
+
+        // ---- Ported from Forge 1.3.6: scattered foods, tools and kitchen blocks ----
+        BERRY_BREAD = registerBlock("berry_bread", BakeriesBlocks.BERRY_BREAD, food(3, 0.7F, false));
+        BERRY_BREAD_DOUGH = register("berry_bread_dough");
+        GARLIC_FLAVORED_BAGUETTE = register("garlic_flavored_baguette", new GarlicBaguetteItem(BakeriesBlocks.GARLIC_FLAVORED_BAGUETTE,
+                food(8, 0.5F, false, effect(MobEffects.DAMAGE_RESISTANCE, 30, 0)).rarity(BakeriesRarity.ADVANCED), effect(MobEffects.DAMAGE_RESISTANCE, 30, 0)));
+        SALMON_SANDWICH = registerBlockWithEffects("salmon_sandwich", BakeriesBlocks.SALMON_SANDWICH,
+                food(10, 0.85F, true, effect(MobEffects.REGENERATION, 30, 0)).rarity(BakeriesRarity.ADVANCED), effect(MobEffects.REGENERATION, 30, 0));
+        DONGPO_PORK_HAMBURG = registerBlock("dongpo_pork_hamburg", BakeriesBlocks.DONGPO_PORK_HAMBURG, food(15, 0.5F, true).rarity(BakeriesRarity.ADVANCED));
+        CREAM_MUSHROOM_SOUP_WITH_BAGUETTE = registerBlock("cream_mushroom_soup_with_baguette", BakeriesBlocks.CREAM_MUSHROOM_SOUP_WITH_BAGUETTE,
+                food(20, 0.75F, true).stacksTo(16).craftRemainder(Items.FLOWER_POT));
+        BUTTER_LATTE = register("butter_latte", foodEffectItem(food(1, 0.5F, true, effect(MobEffects.MOVEMENT_SPEED, 30, 0),
+                new FoodEffectTooltip.Entry(MobEffects.SATURATION, 5, 0)), effect(MobEffects.MOVEMENT_SPEED, 30, 0)));
+        MILK_TEA = register("milk_tea", foodEffectItem(food(1, 0.5F, true, effect(MobEffects.MOVEMENT_SPEED, 30, 0), effect(MobEffects.DIG_SPEED, 30, 0), effect(BakeriesMobEffects.TEA_ASTRINGENT, 60, 0)),
+                effect(MobEffects.MOVEMENT_SPEED, 30, 0), effect(MobEffects.DIG_SPEED, 30, 0), effect(BakeriesMobEffects.TEA_ASTRINGENT, 60, 0)));
+        SWEET_BERRIES_JAM = registerBlock("sweet_berries_jam", BakeriesBlocks.SWEET_BERRIES_JAM, new Item.Properties().stacksTo(16).craftRemainder(Items.GLASS_BOTTLE));
+        BOXED_EGG = registerBlock("boxed_egg", BakeriesBlocks.BOXED_EGG);
+        LONG_EGG_TART = register("long_egg_tart", new RepeatEatBlockItem(BakeriesBlocks.LONG_EGG_TART, food(8, 0.5F, false), 4));
+        CREAM_PUMPKIN_PIE = registerBlock("cream_pumpkin_pie", BakeriesBlocks.CREAM_PUMPKIN_PIE);
+        CREAM_PUMPKIN_PIE_DOUGH = register("cream_pumpkin_pie_dough");
+        RAW_PUMPKIN_PIE = register("raw_pumpkin_pie");
+        RAW_TARE_CRUST = register("raw_tare_crust");
+        CRISPY_DOUGH = register("crispy_dough");
+        SCONE_DOUGH = register("scone_dough");
+        COARSE_SALT = register("coarse_salt");
+        TRAY_SCONE = registerBlock("tray_scone", BakeriesBlocks.TRAY_SCONE, new Item.Properties().stacksTo(1).craftRemainder(WOOD_TRAY));
+        BREAD_HOLDERS = registerBlock("bread_holders", BakeriesBlocks.BREAD_HOLDERS);
+        BLACK_WHITE_CONCRETE = registerBlock("black_white_concrete", BakeriesBlocks.BLACK_WHITE_CONCRETE);
+        MOULD_TOAST = register("mould_toast", new MouldBlockItem(BakeriesBlocks.MOULD_TOAST, new Item.Properties()));
+        MOULD_CHEESE_COCOA_TOAST = register("mould_cheese_cocoa_toast", new MouldBlockItem(BakeriesBlocks.MOULD_CHEESE_COCOA_TOAST, new Item.Properties()));
+        ETERNAL_BAGUETTE = register("eternal_baguette", new EternalBaguetteItem());
+        NETHERITE_BREAD_KNIFE = register("netherite_bread_knife", new BreadKnifeItem(0.5F, -0.2F, Tiers.NETHERITE, new Item.Properties()));
+        ROUND_MOULD = register("round_mould", new RoundMouldItem(new Item.Properties().durability(64)));
+        MUSIC_DISC_BAKING_IN_PROGRESS = register("music_disc_baking_in_progress",
+                new RecordItem(15, BakeriesSounds.MUSIC_DISC_BAKING_IN_PROGRESS, new Item.Properties().stacksTo(1).rarity(Rarity.RARE), 168) { });
+
+        // ---- Ported from Forge 1.3.6: cake system (part 1) ----
+        CAKE_BASE = registerBlock("cake_base", BakeriesBlocks.CAKE_BASE, new Item.Properties().stacksTo(16));
+        RED_VELVET_CAKE_BASE = registerBlock("red_velvet_cake_base", BakeriesBlocks.RED_VELVET_CAKE_BASE, new Item.Properties().stacksTo(16));
+        CREAM_CAKE = registerBlock("cream_cake", BakeriesBlocks.CREAM_CAKE, new Item.Properties().stacksTo(16));
+        TIRAMISU = registerBlock("tiramisu", BakeriesBlocks.TIRAMISU, new Item.Properties().stacksTo(16));
+        CARROT_CAKE = registerBlock("carrot_cake", BakeriesBlocks.CARROT_CAKE, new Item.Properties().stacksTo(16));
+        RED_VELVET_CAKE = registerBlock("red_velvet_cake", BakeriesBlocks.RED_VELVET_CAKE, new Item.Properties().stacksTo(16));
+        MATCHA_CAKE = registerBlock("matcha_cake", BakeriesBlocks.MATCHA_CAKE, new Item.Properties().stacksTo(16));
+        BASQUE_CAKE = registerBlock("basque_cake", BakeriesBlocks.BASQUE_CAKE, new Item.Properties().stacksTo(16));
+        NIANGAO_CAKE = registerBlock("niangao_cake", BakeriesBlocks.NIANGAO_CAKE, new Item.Properties().stacksTo(16));
+        TARO_CAKE = registerBlockWithEffects("taro_cake", BakeriesBlocks.TARO_CAKE,
+                food(8, 1.0F, true, effect(BakeriesMobEffects.SOFT, 90, 0)).rarity(BakeriesRarity.TARO), effect(BakeriesMobEffects.SOFT, 90, 0));
+        POUND_CAKE = registerBlock("pound_cake", BakeriesBlocks.POUND_CAKE);
+        PAPER_CUP = registerBlock("paper_cup", BakeriesBlocks.PAPER_CUP);
+        CUP_CAKE = register("cup_cake", new ContainerFoodBlockItem(BakeriesBlocks.CUP_CAKE,
+                food(4, 0.5F, true, effect(BakeriesMobEffects.SOFT, 60, 0)).craftRemainder(PAPER_CUP), () -> PAPER_CUP, effect(BakeriesMobEffects.SOFT, 60, 0)));
+        SILICONE_PAPER = registerBlock("silicone_paper", BakeriesBlocks.SILICONE_PAPER);
+        MOULD_TWO = registerBlock("mould_two", BakeriesBlocks.MOULD_TWO);
+        MOULD_CAKE_BASE = register("mould_cake_base", new MouldBlockItem(BakeriesBlocks.MOULD_CAKE_BASE, new Item.Properties()));
+        MOULD_CARROT_CAKE = register("mould_carrot_cake", new MouldBlockItem(BakeriesBlocks.MOULD_CARROT_CAKE, new Item.Properties()));
+        MOULD_RED_VELVET_CAKE = register("mould_red_velvet_cake", new MouldBlockItem(BakeriesBlocks.MOULD_RED_VELVET_CAKE, new Item.Properties()));
+        MOULD_MATCHA_CAKE = register("mould_matcha_cake", new MouldBlockItem(BakeriesBlocks.MOULD_MATCHA_CAKE, new Item.Properties()));
+        MOULD_BASQUE_CAKE = register("mould_basque_cake", new MouldBlockItem(BakeriesBlocks.MOULD_BASQUE_CAKE, new Item.Properties()));
+        MOULD_POUND_CAKE = register("mould_pound_cake", new MouldBlockItem(BakeriesBlocks.MOULD_POUND_CAKE, new Item.Properties()));
+        CREAM_CAKE_CUBE = register("cream_cake_cube", foodEffectItem(food(5, 0.4F, true, effect(BakeriesMobEffects.SOFT, 60, 0), effect(MobEffects.REGENERATION, 60, 0)),
+                effect(BakeriesMobEffects.SOFT, 60, 0), effect(MobEffects.REGENERATION, 60, 0)));
+        CUT_CAKE_BASE = register("cut_cake_base");
+        SOAK_COFFEE_CUT_CAKE_BASE = register("soak_coffee_cut_cake_base");
+        SLICED_POUND_CAKE = register("sliced_pound_cake", food(1, 1.0F, true));
+        COCOA_CREAM = register("cocoa_cream", foodEffectItem(food(1, 1.0F, true, effect(BakeriesMobEffects.COCOA_MANIA, 20, 0)), effect(BakeriesMobEffects.COCOA_MANIA, 20, 0)));
+        PAPER_CUP_CAKE_PASTE = register("paper_cup_cake_paste");
+        MOULD_CAKE_PASTE = register("mould_cake_paste");
+        MOULD_CARROT_CAKE_PASTE = register("mould_carrot_cake_paste");
+        MOULD_RED_VELVET_CAKE_PASTE = register("mould_red_velvet_cake_paste");
+        MOULD_MATCHA_CAKE_PASTE = register("mould_matcha_cake_paste");
+        MOULD_POUND_CAKE_PASTE = register("mould_pound_cake_paste");
+        MOULD_BASQUE_CAKE_PASTE = register("mould_basque_cake_paste");
+        CAKE_PASTE_BUCKET = register("cake_paste_bucket", new Item.Properties().stacksTo(1).craftRemainder(Items.BUCKET));
+        EGG_YOLK_PASTE_BUCKET = register("egg_yolk_paste_bucket", new Item.Properties().stacksTo(1).craftRemainder(Items.BUCKET));
+        FOAMED_PROTEIN_BUCKET = register("foamed_protein_bucket", new Item.Properties().stacksTo(1).craftRemainder(Items.BUCKET));
+
         BAKERIES_TAB = Registry.register(
                 BuiltInRegistries.CREATIVE_MODE_TAB,
                 new ResourceLocation(BakeriesMod.MODID, "main"),
@@ -206,6 +305,19 @@ public final class BakeriesItems {
                                     entries.accept(MOULD_TOAST_DOUGH);
                                     entries.accept(MOULD_CHEESE_COCOA_TOAST_DOUGH);
                                     entries.accept(RICE_BREAD_DOUGH);
+                                    entries.accept(BERRY_BREAD_DOUGH);
+                                    entries.accept(SCONE_DOUGH);
+                                    entries.accept(CRISPY_DOUGH);
+                                    entries.accept(RAW_TARE_CRUST);
+                                    entries.accept(RAW_PUMPKIN_PIE);
+                                    entries.accept(CREAM_PUMPKIN_PIE_DOUGH);
+                                    entries.accept(PAPER_CUP_CAKE_PASTE);
+                                    entries.accept(MOULD_CAKE_PASTE);
+                                    entries.accept(MOULD_CARROT_CAKE_PASTE);
+                                    entries.accept(MOULD_RED_VELVET_CAKE_PASTE);
+                                    entries.accept(MOULD_MATCHA_CAKE_PASTE);
+                                    entries.accept(MOULD_POUND_CAKE_PASTE);
+                                    entries.accept(MOULD_BASQUE_CAKE_PASTE);
                                 }
                         )
                         .build()
@@ -290,7 +402,18 @@ public final class BakeriesItems {
 
                 COFFEE_PLANT, TOMATO,
 
-                RAW_SALT_BLOCK, SALT_ORE, DEEPSLATE_SALT_ORE
+                RAW_SALT_BLOCK, SALT_ORE, DEEPSLATE_SALT_ORE, COARSE_SALT,
+
+                NETHERITE_BREAD_KNIFE, ETERNAL_BAGUETTE, ROUND_MOULD, MUSIC_DISC_BAKING_IN_PROGRESS,
+                MOULD_TOAST, MOULD_CHEESE_COCOA_TOAST, BREAD_HOLDERS, BLACK_WHITE_CONCRETE, BOXED_EGG, SWEET_BERRIES_JAM,
+                BERRY_BREAD, GARLIC_FLAVORED_BAGUETTE, SALMON_SANDWICH, DONGPO_PORK_HAMBURG, LONG_EGG_TART,
+                CREAM_PUMPKIN_PIE, CREAM_MUSHROOM_SOUP_WITH_BAGUETTE, TRAY_SCONE, BUTTER_LATTE, MILK_TEA,
+
+                MOULD_TWO, SILICONE_PAPER, PAPER_CUP, CAKE_PASTE_BUCKET, EGG_YOLK_PASTE_BUCKET, FOAMED_PROTEIN_BUCKET, COCOA_CREAM,
+                MOULD_CAKE_BASE, MOULD_CARROT_CAKE, MOULD_RED_VELVET_CAKE, MOULD_MATCHA_CAKE, MOULD_BASQUE_CAKE, MOULD_POUND_CAKE,
+                CAKE_BASE, RED_VELVET_CAKE_BASE, CUT_CAKE_BASE, SOAK_COFFEE_CUT_CAKE_BASE,
+                CREAM_CAKE, CREAM_CAKE_CUBE, TIRAMISU, CARROT_CAKE, RED_VELVET_CAKE, MATCHA_CAKE, BASQUE_CAKE, NIANGAO_CAKE, TARO_CAKE,
+                POUND_CAKE, SLICED_POUND_CAKE, CUP_CAKE
         };
     }
 

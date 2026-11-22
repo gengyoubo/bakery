@@ -1,0 +1,21 @@
+{
+  "type": "bakeries:coffee",
+  "ingredients": [
+    {
+      "item": "minecraft:ice"
+    },
+    {
+      "tag": "c:milk"
+    },
+    {
+      "tag": "minecraft:leaves"
+    },
+    {
+      "item": "minecraft:ender_pearl"
+    }
+  ],
+  "result": {
+    "item": "bakeries:milk_tea",
+    "count": 1
+  }
+}

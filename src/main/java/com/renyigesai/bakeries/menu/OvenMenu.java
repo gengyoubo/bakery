@@ -20,7 +20,7 @@ public class OvenMenu extends AbstractMachineMenu {
     }
 
     public OvenMenu(int syncId, Inventory playerInventory, Container container, ContainerData data) {
-        super(BakeriesMenuTypes.OVEN, syncId, playerInventory, container == null ? new SimpleContainer(SLOT_COUNT) : container, SLOT_COUNT, data == null ? new SimpleContainerData(3) : data);
+        super(BakeriesMenuTypes.OVEN, syncId, playerInventory, container == null ? new SimpleContainer(SLOT_COUNT) : container, SLOT_COUNT, data == null ? new SimpleContainerData(3 + com.renyigesai.bakeries.block.entity.MachineBlockEntity.OVEN_SLOTS) : data);
         this.addSlot(new SingleItemSlot(this.container, 0, 52, 16));
         this.addSlot(new SingleItemSlot(this.container, 1, 70, 16));
         this.addSlot(new SingleItemSlot(this.container, 2, 88, 16));
@@ -32,5 +32,10 @@ public class OvenMenu extends AbstractMachineMenu {
 
     public int getOvenTemperature() {
         return this.data.get(2);
+    }
+
+    /** Baking progress of oven slot 0-5, in percent. */
+    public int getSlotProgress(int slot) {
+        return this.data.get(3 + slot);
     }
 }

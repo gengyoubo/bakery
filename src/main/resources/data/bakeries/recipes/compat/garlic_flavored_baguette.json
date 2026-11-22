@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:item_tags_populated",
+      "values": [
+        "c:vegetables/garlic"
+      ]
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "bakeries:baguette"
+    },
+    {
+      "tag": "c:vegetables/garlic"
+    },
+    {
+      "tag": "c:butter"
+    }
+  ],
+  "result": {
+    "item": "bakeries:garlic_flavored_baguette",
+    "count": 1
+  }
+}

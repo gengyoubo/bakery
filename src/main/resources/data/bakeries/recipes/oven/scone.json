@@ -1,0 +1,13 @@
+{
+  "type": "bakeries:oven",
+  "ingredient": {
+    "item": "bakeries:scone_dough"
+  },
+  "result": {
+    "item": "bakeries:scone",
+    "count": 1
+  },
+  "min": 180,
+  "max": 200,
+  "time": 200
+}

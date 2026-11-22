@@ -1,0 +1,39 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "farmersdelight"
+      ]
+    },
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "luncheonmeatsdelight"
+      ]
+    }
+  ],
+  "type": "farmersdelight:cooking",
+  "ingredients": [
+    {
+      "item": "bakeries:bake_sliced_toast"
+    },
+    {
+      "item": "luncheonmeatsdelight:luncheon_meat"
+    },
+    {
+      "item": "luncheonmeatsdelight:luncheon_meat"
+    },
+    {
+      "tag": "c:salad_ingredients"
+    },
+    {
+      "item": "bakeries:bake_sliced_toast"
+    }
+  ],
+  "result": {
+    "item": "luncheonmeatsdelight:luncheon_meat_sandwich"
+  },
+  "experience": 0.35,
+  "cookingtime": 200
+}

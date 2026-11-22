@@ -1,0 +1,12 @@
+{
+  "type": "bakeries:bread_knife",
+  "ingredient": {
+    "item": "bakeries:pound_cake"
+  },
+  "result": [
+    {
+      "item": "bakeries:sliced_pound_cake",
+      "count": 4
+    }
+  ]
+}

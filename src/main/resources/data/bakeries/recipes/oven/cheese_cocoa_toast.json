@@ -3,12 +3,12 @@
   "ingredient": {
     "item": "bakeries:mould_cheese_cocoa_toast_dough"
   },
-  "max": 185,
-  "min": 135,
-  "perfect": 160,
   "result": {
-    "count": 1,
-    "item": "bakeries:cheese_cocoa_toast"
+    "item": "bakeries:mould_cheese_cocoa_toast",
+    "count": 1
   },
+  "min": 135,
+  "max": 185,
+  "perfect": 160,
   "time": 400
 }

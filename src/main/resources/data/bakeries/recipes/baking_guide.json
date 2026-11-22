@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "patchouli"
+      ]
+    }
+  ],
+  "type": "patchouli:shaped_book_recipe",
+  "pattern": [
+    "ab ",
+    "cd "
+  ],
+  "key": {
+    "a": {
+      "item": "minecraft:book"
+    },
+    "b": {
+      "item": "minecraft:bread"
+    },
+    "c": {
+      "item": "minecraft:ink_sac"
+    },
+    "d": {
+      "item": "minecraft:feather"
+    }
+  },
+  "book": "bakeries:baking_guide"
+}

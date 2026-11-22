@@ -30,6 +30,11 @@ public class BreadKnifeItem extends DiggerItem {
         super(2.5F, -0.2F, Tiers.STONE, BlockTags.MINEABLE_WITH_PICKAXE, properties);
     }
 
+    /** Knife of another material (e.g. the netherite bread knife); durability comes from the tier. */
+    public BreadKnifeItem(float attackDamage, float attackSpeed, net.minecraft.world.item.Tier tier, Properties properties) {
+        super(attackDamage, attackSpeed, tier, BlockTags.MINEABLE_WITH_PICKAXE, properties);
+    }
+
     @Override
     public @NotNull InteractionResult useOn(net.minecraft.world.item.context.UseOnContext context) {
         return InteractionResult.PASS;

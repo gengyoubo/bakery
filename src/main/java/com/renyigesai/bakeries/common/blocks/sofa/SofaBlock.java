@@ -1,23 +1,22 @@
 package com.renyigesai.bakeries.common.blocks.sofa;
 
-import com.renyigesai.bakeries.init.blocks.FacingBlock;
-import com.renyigesai.bakeries.init.blocks.RackType;
-import com.renyigesai.bakeries.init.blocks.StateBlocks;
+import com.renyigesai.bakeries.BakeriesMod;
+import com.renyigesai.bakeries.init.blocks.HorizontalConnectBlock;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -26,35 +25,20 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class SofaBlock extends FacingBlock {
+public class SofaBlock extends HorizontalConnectBlock {
+    private static final TagKey<Block> SOFAS = TagKey.create(Registries.BLOCK, new ResourceLocation(BakeriesMod.MODID, "sofa"));
     private static final String SOFA_SEAT_TAG = "bakeries_sofa_seat";
     private static final String SOFA_SEAT_POS_TAG_PREFIX = "bakeries_sofa_pos:";
     private static final VoxelShape SOFA_SHAPE = box(0, 0, 0, 16, 10, 16);
 
     public SofaBlock(BlockBehaviour.Properties properties) {
         super(properties);
-        this.registerDefaultState(this.defaultBlockState().setValue(StateBlocks.RackBlock.TYPE, RackType.SINGLE));
     }
 
+    /** Any sofa (all colours, #bakeries:sofa) connects, like the Forge version. */
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<net.minecraft.world.level.block.Block, BlockState> builder) {
-        super.createBlockStateDefinition(builder);
-        builder.add(StateBlocks.RackBlock.TYPE);
-    }
-
-    @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
-        BlockState state = super.getStateForPlacement(context);
-        return updateConnectionType(context.getLevel(), context.getClickedPos(), state == null ? this.defaultBlockState() : state);
-    }
-
-    @Override
-    @SuppressWarnings("deprecation")
-    public @NotNull BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos pos, BlockPos facingPos) {
-        if (facing.getAxis().isHorizontal()) {
-            return updateConnectionType(level, pos, state);
-        }
-        return super.updateShape(state, facing, facingState, level, pos, facingPos);
+    public boolean matchConnect(BlockState state) {
+        return state.is(SOFAS);
     }
 
     @Override
@@ -139,25 +123,4 @@ public class SofaBlock extends FacingBlock {
         super.onRemove(state, level, pos, newState, isMoving);
     }
 
-    private BlockState updateConnectionType(LevelAccessor level, BlockPos pos, BlockState state) {
-        Direction facing = state.getValue(FACING);
-        boolean connectedLeft = connectsTo(level, pos.relative(facing.getCounterClockWise()), state);
-        boolean connectedRight = connectsTo(level, pos.relative(facing.getClockWise()), state);
-        RackType type;
-        if (connectedLeft && connectedRight) {
-            type = RackType.ALL;
-        } else if (connectedLeft) {
-            type = RackType.LEFT;
-        } else if (connectedRight) {
-            type = RackType.RIGHT;
-        } else {
-            type = RackType.SINGLE;
-        }
-        return state.setValue(StateBlocks.RackBlock.TYPE, type);
-    }
-
-    private boolean connectsTo(LevelAccessor level, BlockPos pos, BlockState state) {
-        BlockState other = level.getBlockState(pos);
-        return other.is(this) && other.getValue(FACING) == state.getValue(FACING);
-    }
 }

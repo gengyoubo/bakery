@@ -1,0 +1,12 @@
+{
+  "type": "bakeries:bread_knife",
+  "ingredient": {
+    "item": "bakeries:cake_base"
+  },
+  "result": [
+    {
+      "item": "bakeries:cut_cake_base",
+      "count": 2
+    }
+  ]
+}

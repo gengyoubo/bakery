@@ -1,0 +1,10 @@
+{
+  "type": "bakeries:dough_crafting",
+  "ingredient": {
+    "item": "bakeries:crispy_dough"
+  },
+  "result": {
+    "count": 8,
+    "item": "bakeries:scone_dough"
+  }
+}

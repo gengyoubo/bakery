@@ -1,0 +1,14 @@
+{
+  "type": "bakeries:oven",
+  "ingredient": {
+    "item": "bakeries:berry_bread_dough"
+  },
+  "result": {
+    "item": "bakeries:berry_bread",
+    "count": 1
+  },
+  "min": 185,
+  "max": 215,
+  "perfect": 200,
+  "time": 200
+}

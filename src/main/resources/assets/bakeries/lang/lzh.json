@@ -333,5 +333,16 @@
   "tip.bakeries.player_logged_in": "§6[焙馫園]]§f措置拔楸歷以得改囊教章",
   "gui.bakeries.oven.temperature": "時溫",
   "container.bakeries.toaster.time": "%s 刻",
-  "gui.bakeries.oven.rolling": "§o輪調"
+  "gui.bakeries.oven.rolling": "§o輪調",
+  "block.generic.oven_draw_slip": "焙盤滑",
+  "block.generic.pastry_place": "糕餅：置",
+  "block.generic.steel_pipe": "鐵管鳴",
+  "block.generic.toaster_in": "烘餅爐入",
+  "block.generic.toaster_out": "烘餅爐出",
+  "block.bakeries.berry_bread": "甜莓饢",
+  "block.bakeries.garlic_flavored_baguette": "蒜香芳司棍饢",
+  "block.bakeries.cup_cake": "紙杯洋糕",
+  "block.bakeries.paper_cup": "紙杯",
+  "item.bakeries.cut_cake_base": "洋糕胚片",
+  "item.bakeries.soak_coffee_cut_cake_base": "玄茶潤洋糕胚片"
 }

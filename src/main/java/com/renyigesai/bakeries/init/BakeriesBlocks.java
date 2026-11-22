@@ -3,6 +3,7 @@ package com.renyigesai.bakeries.init;
 import com.renyigesai.bakeries.BakeriesMod;
 import com.renyigesai.bakeries.common.blocks.menu.MenuBlock;
 import com.renyigesai.bakeries.common.blocks.sofa.SofaBlock;
+import com.renyigesai.bakeries.init.blocks.FoodBlocks;
 import com.renyigesai.bakeries.init.blocks.MachineBlocks;
 import com.renyigesai.bakeries.init.blocks.StateBlocks;
 import net.minecraft.core.Registry;
@@ -11,6 +12,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DropExperienceBlock;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.MapColor;
@@ -36,7 +40,55 @@ public final class BakeriesBlocks {
     public static final Block WOOD_TRAY;
     public static final Block PINEAPPLE_OIL;
     public static final Block BROWN_SUGAR_ROLL;
+    // Ported from Forge 1.3.6 (scattered foods and kitchen blocks)
+    public static final Block BERRY_BREAD, GARLIC_FLAVORED_BAGUETTE, SALMON_SANDWICH, DONGPO_PORK_HAMBURG,
+            SWEET_BERRIES_JAM, LONG_EGG_TART, BOXED_EGG, CREAM_PUMPKIN_PIE, CREAM_MUSHROOM_SOUP_WITH_BAGUETTE,
+            TRAY_SCONE, BREAD_HOLDERS, BLACK_WHITE_CONCRETE, MOULD_TOAST, MOULD_CHEESE_COCOA_TOAST;
+    // Ported from Forge 1.3.6: cake system (part 1)
+    public static final Block CAKE_BASE, RED_VELVET_CAKE_BASE, CREAM_CAKE, MULTI_LAYER_CREAM_CAKE, TIRAMISU, CARROT_CAKE,
+            RED_VELVET_CAKE, MATCHA_CAKE, BASQUE_CAKE, NIANGAO_CAKE, TARO_CAKE, POUND_CAKE, CUP_CAKE, PAPER_CUP, SILICONE_PAPER,
+            MOULD_TWO, MOULD_CAKE_BASE, MOULD_CARROT_CAKE, MOULD_RED_VELVET_CAKE, MOULD_MATCHA_CAKE, MOULD_BASQUE_CAKE, MOULD_POUND_CAKE;
     static {
+        CAKE_BASE = register("cake_base", cake(5, 0.4F));
+        RED_VELVET_CAKE_BASE = register("red_velvet_cake_base", cake(5, 0.4F));
+        MULTI_LAYER_CREAM_CAKE = register("multi_layer_cream_cake", new FoodBlocks.MultiLayerCreamCakeBlock(cakeProperties(), () -> BakeriesItems.CREAM_CAKE_CUBE));
+        CREAM_CAKE = register("cream_cake", new FoodBlocks.CreamCakeBlock(cakeProperties(), () -> MULTI_LAYER_CREAM_CAKE, 5, 0.4F,
+                () -> new MobEffectInstance(BakeriesMobEffects.SOFT, 1200), () -> new MobEffectInstance(MobEffects.REGENERATION, 1200)));
+        TIRAMISU = register("tiramisu", cake(4, 0.5F, () -> new MobEffectInstance(BakeriesMobEffects.CHEESE_POWER, 1200),
+                () -> new MobEffectInstance(BakeriesMobEffects.COCOA_MANIA, 1200), () -> new MobEffectInstance(MobEffects.NIGHT_VISION, 1200)));
+        CARROT_CAKE = register("carrot_cake", cake(10, 0.25F, () -> new MobEffectInstance(MobEffects.NIGHT_VISION, 1200)));
+        RED_VELVET_CAKE = register("red_velvet_cake", cake(5, 0.25F));
+        MATCHA_CAKE = register("matcha_cake", cake(10, 0.25F, () -> new MobEffectInstance(BakeriesMobEffects.TEA_ASTRINGENT, 1200)));
+        BASQUE_CAKE = register("basque_cake", cake(6, 0.5F, () -> new MobEffectInstance(BakeriesMobEffects.CHEESE_POWER, 1200)));
+        NIANGAO_CAKE = register("niangao_cake", cake(6, 0.5F, () -> new MobEffectInstance(BakeriesMobEffects.SOFT, 1200),
+                () -> new MobEffectInstance(BakeriesMobEffects.ENJOY, 1200)));
+        TARO_CAKE = register("taro_cake", pastryPile(4));
+        CUP_CAKE = register("cup_cake", pastryPile(4));
+        POUND_CAKE = register("pound_cake", new StateBlocks.ToastBlock(BlockBehaviour.Properties.of().sound(BakeriesSounds.PASTRY).strength(0.5F, 0.5F).noOcclusion()));
+        PAPER_CUP = register("paper_cup", new FoodBlocks.PaperCupBlock(BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).noOcclusion(),
+                () -> BakeriesItems.CAKE_PASTE_BUCKET, () -> BakeriesItems.PAPER_CUP_CAKE_PASTE));
+        SILICONE_PAPER = register("silicone_paper", new FoodBlocks.ShapedFacingBlock(BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).strength(0.1F).noOcclusion(), Block.box(1, 0, 1, 15, 1, 15)));
+        MOULD_TWO = register("mould_two", new StateBlocks.MouldBlock(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(0.5F, 0.5F).noOcclusion(), Block.box(2, 0, 2, 14, 7, 14)));
+        MOULD_CAKE_BASE = register("mould_cake_base", mouldCake(() -> BakeriesItems.CAKE_BASE));
+        MOULD_CARROT_CAKE = register("mould_carrot_cake", mouldCake(() -> BakeriesItems.CARROT_CAKE));
+        MOULD_RED_VELVET_CAKE = register("mould_red_velvet_cake", mouldCake(() -> BakeriesItems.RED_VELVET_CAKE_BASE));
+        MOULD_MATCHA_CAKE = register("mould_matcha_cake", mouldCake(() -> BakeriesItems.MATCHA_CAKE));
+        MOULD_BASQUE_CAKE = register("mould_basque_cake", mouldCake(() -> BakeriesItems.BASQUE_CAKE));
+        MOULD_POUND_CAKE = register("mould_pound_cake", new FoodBlocks.MouldToastBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).strength(0.5F).noOcclusion(), () -> BakeriesItems.POUND_CAKE));
+        BERRY_BREAD = register("berry_bread", pastryPile(4));
+        GARLIC_FLAVORED_BAGUETTE = register("garlic_flavored_baguette", pastryPile(4));
+        SALMON_SANDWICH = register("salmon_sandwich", pastryPile(4));
+        DONGPO_PORK_HAMBURG = register("dongpo_pork_hamburg", pastryPile(4));
+        LONG_EGG_TART = register("long_egg_tart", pastryPile(4));
+        SWEET_BERRIES_JAM = register("sweet_berries_jam", new StateBlocks.FacingPileBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).strength(0.3F).noOcclusion(), 4));
+        BOXED_EGG = register("boxed_egg", new StateBlocks.FacingPileBlock(BlockBehaviour.Properties.of().sound(SoundType.WOOL).strength(0.5F).noOcclusion(), 2));
+        CREAM_PUMPKIN_PIE = register("cream_pumpkin_pie", new FoodBlocks.CreamPumpkinPieBlock(BlockBehaviour.Properties.copy(Blocks.CAKE)));
+        CREAM_MUSHROOM_SOUP_WITH_BAGUETTE = register("cream_mushroom_soup_with_baguette", new FoodBlocks.CreamMushroomSoupBlock(BlockBehaviour.Properties.copy(Blocks.CAKE)));
+        TRAY_SCONE = register("tray_scone", new FoodBlocks.ShapedFacingBlock(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS).noOcclusion(), Block.box(2, 0, 2, 14, 2, 14)));
+        BREAD_HOLDERS = register("bread_holders", new FoodBlocks.ShapedFacingBlock(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS).noOcclusion(), Block.box(0, 6, 0, 16, 14, 16)));
+        BLACK_WHITE_CONCRETE = register("black_white_concrete", new Block(BlockBehaviour.Properties.copy(Blocks.WHITE_CONCRETE)));
+        MOULD_TOAST = register("mould_toast", new FoodBlocks.MouldToastBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).strength(0.5F).noOcclusion(), () -> BakeriesItems.TOAST));
+        MOULD_CHEESE_COCOA_TOAST = register("mould_cheese_cocoa_toast", new FoodBlocks.MouldToastBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).strength(0.5F).noOcclusion(), () -> BakeriesItems.CHEESE_COCOA_TOAST));
         BROWN_SUGAR_ROLL = register("brown_sugar_roll", new StateBlocks.FacingPileBlock(BlockBehaviour.Properties.of().strength(3.5F).noOcclusion(), 4));
         PINEAPPLE_OIL = register("pineapple_oil", new StateBlocks.FacingPileBlock(BlockBehaviour.Properties.of().strength(3.5F).noOcclusion(), 4));
         SOFA_LIGHT_GRAY = register("sofa_light_gray", new SofaBlock(BlockBehaviour.Properties.of().strength(3.5F).noOcclusion()));
@@ -105,6 +157,25 @@ public final class BakeriesBlocks {
 
     public static void init() {
         BakeriesMod.LOGGER.info("Registered Bakeries base blocks.");
+    }
+
+    /** Forge BCakeBlock.CAKE properties (solid-ish, pastry sound, destroyed by pistons, faint light). */
+    private static BlockBehaviour.Properties cakeProperties() {
+        return BlockBehaviour.Properties.of().forceSolidOn().strength(0.5F).sound(BakeriesSounds.PASTRY)
+                .pushReaction(PushReaction.DESTROY).lightLevel(state -> 1).noOcclusion();
+    }
+
+    @SafeVarargs
+    private static Block cake(int nutrition, float saturation, java.util.function.Supplier<MobEffectInstance>... effects) {
+        return new FoodBlocks.BakeryCakeBlock(cakeProperties(), nutrition, saturation, effects);
+    }
+
+    private static Block mouldCake(java.util.function.Supplier<net.minecraft.world.item.Item> content) {
+        return new FoodBlocks.MouldCakeBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).strength(0.5F, 0.5F).noOcclusion(), content, () -> MOULD_TWO);
+    }
+
+    private static Block pastryPile(int maxPile) {
+        return new StateBlocks.FacingPileBlock(BlockBehaviour.Properties.of().sound(BakeriesSounds.PASTRY).strength(0.5F, 0.5F).noOcclusion(), maxPile);
     }
 
     private static Block register(String id, BlockBehaviour.Properties properties) {

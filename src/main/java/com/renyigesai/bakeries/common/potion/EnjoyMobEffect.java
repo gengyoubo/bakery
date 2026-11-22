@@ -4,6 +4,8 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import com.renyigesai.bakeries.items.EternalBaguetteItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +36,12 @@ public class EnjoyMobEffect extends BakeriesMobEffect {
         }
         if (!harmfulEffects.isEmpty()) {
             livingEntity.removeEffect(harmfulEffects.get(0));
+        }
+
+        // Eternal baguette hits harder while enjoying (+2 damage per level), as in the Forge version.
+        ItemStack held = livingEntity.getMainHandItem().isEmpty() ? livingEntity.getOffhandItem() : livingEntity.getMainHandItem();
+        if (held.getItem() instanceof EternalBaguetteItem) {
+            EternalBaguetteItem.applyEnjoyBonus(held, amplifier);
         }
     }
 }

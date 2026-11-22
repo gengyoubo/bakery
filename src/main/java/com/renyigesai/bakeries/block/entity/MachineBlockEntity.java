@@ -6,6 +6,7 @@ import com.renyigesai.bakeries.init.BakeriesBlocks;
 import com.renyigesai.bakeries.init.BakeriesItems;
 import com.renyigesai.bakeries.init.BakeriesRecipeTypes;
 import com.renyigesai.bakeries.init.BakeriesSounds;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import com.renyigesai.bakeries.init.blocks.StateBlocks;
 import com.renyigesai.bakeries.init.blocks.ToasterState;
@@ -18,6 +19,8 @@ import com.renyigesai.bakeries.recipe.BlenderRecipe;
 import com.renyigesai.bakeries.recipe.CoffeeRecipe;
 import com.renyigesai.bakeries.recipe.SimpleMachineRecipe;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.WorldlyContainer;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -48,8 +51,12 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 @SuppressWarnings("unused")
-public class MachineBlockEntity extends BlockEntity implements ImplementedInventory, MenuProvider {
+public class MachineBlockEntity extends BlockEntity implements ImplementedInventory, WorldlyContainer, MenuProvider {
     private static final int SIZE = 27;
+    private static final int[] NO_SLOTS = new int[0];
+    private static final int[] BLENDER_OUTPUT_SLOTS = {10};
+    private static final int[] FERMENTATION_SLOTS = {0, 1, 2, 3, 4, 5};
+    private static final int[] CUPBOARD_SLOTS = java.util.stream.IntStream.range(0, 21).toArray();
     private static final int DEFAULT_MAX_PROGRESS = 100;
     private static final int OVEN_MAX_PROGRESS = 120;
     private static final int BLENDER_MAX_PROGRESS = 80;
@@ -67,6 +74,10 @@ public class MachineBlockEntity extends BlockEntity implements ImplementedInvent
     private int fermentationPerfectTime = 600;
     private long fermentationTemperatureDay = Long.MIN_VALUE;
     private int fermentationTemperatureRevision = -1;
+    /** Oven: every one of the 6 slots bakes its own item (Forge behaviour). */
+    public static final int OVEN_SLOTS = 6;
+    private final int[] ovenCookTime = new int[OVEN_SLOTS];
+    private final int[] ovenCookMax = new int[OVEN_SLOTS];
     private final int[] toasterCookingProgress = new int[2];
     private final int[] toasterCookingTime = new int[2];
     private final ContainerData machineMenuData = new ContainerData() {
@@ -101,6 +112,8 @@ public class MachineBlockEntity extends BlockEntity implements ImplementedInvent
                 case 0 -> MachineBlockEntity.this.progress;
                 case 1 -> MachineBlockEntity.this.maxProgress;
                 case 2 -> MachineBlockEntity.this.ovenTemperature;
+                // 3..8: baking progress of each slot in percent
+                case 3, 4, 5, 6, 7, 8 -> MachineBlockEntity.this.getOvenSlotPercent(index - 3);
                 default -> 0;
             };
         }
@@ -118,7 +131,7 @@ public class MachineBlockEntity extends BlockEntity implements ImplementedInvent
 
         @Override
         public int getCount() {
-            return 3;
+            return 3 + OVEN_SLOTS;
         }
     };
     private final ContainerData fermentationMenuData = new ContainerData() {
@@ -170,6 +183,8 @@ public class MachineBlockEntity extends BlockEntity implements ImplementedInvent
         tag.putInt("FermentationTemperature", fermentationTemperature);
         tag.putInt("FermentationPerfectTime", fermentationPerfectTime);
         tag.putLong("FermentationTemperatureDay", fermentationTemperatureDay);
+        tag.putIntArray("OvenCookTime", ovenCookTime);
+        tag.putIntArray("OvenCookMax", ovenCookMax);
         tag.putIntArray("ToasterProgress", toasterCookingProgress);
         tag.putIntArray("ToasterTime", toasterCookingTime);
     }
@@ -184,6 +199,14 @@ public class MachineBlockEntity extends BlockEntity implements ImplementedInvent
         fermentationTemperature = tag.contains("FermentationTemperature") ? tag.getInt("FermentationTemperature") : 23;
         fermentationPerfectTime = tag.contains("FermentationPerfectTime") ? tag.getInt("FermentationPerfectTime") : getNowPerfectTime(fermentationTemperature);
         fermentationTemperatureDay = Long.MIN_VALUE;
+        if (tag.contains("OvenCookTime")) {
+            int[] values = tag.getIntArray("OvenCookTime");
+            System.arraycopy(values, 0, ovenCookTime, 0, Math.min(values.length, OVEN_SLOTS));
+        }
+        if (tag.contains("OvenCookMax")) {
+            int[] values = tag.getIntArray("OvenCookMax");
+            System.arraycopy(values, 0, ovenCookMax, 0, Math.min(values.length, OVEN_SLOTS));
+        }
         if (tag.contains("ToasterProgress")) {
             int[] values = tag.getIntArray("ToasterProgress");
             System.arraycopy(values, 0, toasterCookingProgress, 0, Math.min(values.length, toasterCookingProgress.length));
@@ -228,6 +251,74 @@ public class MachineBlockEntity extends BlockEntity implements ImplementedInvent
         if (level != null) {
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
         }
+    }
+
+    // ---- Automation (hoppers, Fabric Transfer API: Create funnels/arms, pipes) ----
+    // Mirrors the Forge item-handler sides; anything not listed here is closed to automation,
+    // so hoppers can no longer stuff items into the unused slots of the 27-slot inventory.
+
+    /** Oven and fermentation box slots hold a single item each (the result replaces it in place). */
+    @Override
+    public int getMaxStackSize() {
+        BlockState state = getBlockState();
+        return state.is(BakeriesBlocks.FERMENTATION_BOX) || state.is(BakeriesBlocks.OVEN) ? 1 : ImplementedInventory.super.getMaxStackSize();
+    }
+
+    @Override
+    public int @NotNull [] getSlotsForFace(@NotNull Direction side) {
+        BlockState state = getBlockState();
+        if (state.is(BakeriesBlocks.OVEN)) {
+            // top/sides load dough into any free slot, bottom pulls finished items
+            return FERMENTATION_SLOTS;
+        }
+        if (state.is(BakeriesBlocks.BLENDER)) {
+            // Forge: only the output slot, from below
+            return side == Direction.DOWN ? BLENDER_OUTPUT_SLOTS : NO_SLOTS;
+        }
+        if (state.is(BakeriesBlocks.FERMENTATION_BOX)) {
+            // Forge: insert from the top, extract from the bottom
+            return side == Direction.UP || side == Direction.DOWN ? FERMENTATION_SLOTS : NO_SLOTS;
+        }
+        if (state.is(BakeriesBlocks.CUPBOARD)) {
+            return CUPBOARD_SLOTS;
+        }
+        return NO_SLOTS;
+    }
+
+    @Override
+    public boolean canPlaceItemThroughFace(int slot, @NotNull ItemStack stack, @Nullable Direction side) {
+        BlockState state = getBlockState();
+        if (state.is(BakeriesBlocks.OVEN)) {
+            return side != Direction.DOWN && slot >= 0 && slot < OVEN_SLOTS && getItem(slot).isEmpty() && findOvenRecipeFor(stack) != null;
+        }
+        if (state.is(BakeriesBlocks.FERMENTATION_BOX)) {
+            // one dough per slot, like the GUI and the Forge handler
+            return side == Direction.UP && slot >= 0 && slot <= 5 && getItem(slot).isEmpty();
+        }
+        if (state.is(BakeriesBlocks.CUPBOARD)) {
+            return slot >= 0 && slot < CUPBOARD_SLOTS.length;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean canTakeItemThroughFace(int slot, @NotNull ItemStack stack, @NotNull Direction side) {
+        BlockState state = getBlockState();
+        if (state.is(BakeriesBlocks.OVEN)) {
+            // only things that can't be baked any further (finished bread, charcoal)
+            return side == Direction.DOWN && slot >= 0 && slot < OVEN_SLOTS && findOvenRecipeFor(stack) == null;
+        }
+        if (state.is(BakeriesBlocks.BLENDER)) {
+            return side == Direction.DOWN && slot == 10;
+        }
+        if (state.is(BakeriesBlocks.FERMENTATION_BOX)) {
+            // Only finished dough leaves; Forge let a hopper pull raw dough straight back out.
+            return side == Direction.DOWN && slot >= 0 && slot <= 5 && findFermentationRecipe(slot) == null;
+        }
+        if (state.is(BakeriesBlocks.CUPBOARD)) {
+            return slot >= 0 && slot < CUPBOARD_SLOTS.length;
+        }
+        return false;
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, MachineBlockEntity machine) {
@@ -373,28 +464,100 @@ public class MachineBlockEntity extends BlockEntity implements ImplementedInvent
         setChanged();
     }
 
+    /**
+     * Forge oven: each of the 6 slots bakes on its own and the result replaces the dough in place.
+     * Below the recipe's minimum temperature nothing happens (progress resets); above the maximum the
+     * item burns to charcoal; exactly at the perfect temperature the result is marked "Perfect Temperature".
+     * A bell rings once the last item in the oven is done.
+     */
     private void tickOvenRecipe() {
         if (level == null) {
             return;
         }
-        OvenMatch matched = findOvenRecipe();
-        if (matched == null) {
-            resetProgressIfNeeded();
-            return;
+        boolean changed = false;
+        boolean finishedOne = false;
+        int shownProgress = 0;
+        int shownMax = OVEN_MAX_PROGRESS;
+        for (int slot = 0; slot < OVEN_SLOTS; slot++) {
+            ItemStack input = getItem(slot);
+            SimpleMachineRecipe recipe = input.isEmpty() ? null : findOvenRecipeFor(input);
+            if (recipe == null || (recipe.getMinTemperature() >= 0 && ovenTemperature < recipe.getMinTemperature())) {
+                if (ovenCookTime[slot] != 0 || ovenCookMax[slot] != 0) {
+                    ovenCookTime[slot] = 0;
+                    ovenCookMax[slot] = 0;
+                    changed = true;
+                }
+                continue;
+            }
+            int max = recipe.getCraftTime() > 0 ? recipe.getCraftTime() : OVEN_MAX_PROGRESS;
+            ovenCookMax[slot] = max;
+            ovenCookTime[slot]++;
+            changed = true;
+            if (ovenCookTime[slot] >= max) {
+                items.set(slot, bakeResult(recipe, input));
+                ovenCookTime[slot] = 0;
+                ovenCookMax[slot] = 0;
+                finishedOne = true;
+            } else if ((long) ovenCookTime[slot] * shownMax > (long) shownProgress * max) {
+                shownProgress = ovenCookTime[slot];
+                shownMax = max;
+            }
         }
-        maxProgress = matched.recipe.getCraftTime() > 0 ? matched.recipe.getCraftTime() : OVEN_MAX_PROGRESS;
-        progress++;
-        if (progress < maxProgress) {
+        // overall progress (used by the look-at overlay): the slot closest to done
+        if (progress != shownProgress || maxProgress != shownMax) {
+            progress = shownProgress;
+            maxProgress = shownMax;
+            changed = true;
+        }
+        if (finishedOne && !isOvenBaking()) {
+            level.playSound(null, worldPosition, SoundEvents.NOTE_BLOCK_BELL.value(), SoundSource.BLOCKS, 1.0F, 1.0F);
+        }
+        if (changed) {
             setChanged();
-            return;
         }
-        if (matched.burnt) {
-            craftOvenCharcoal(matched.recipe);
-        } else {
-            craftOnce(0, 5, matched.recipe);
+    }
+
+    private boolean isOvenBaking() {
+        for (int time : ovenCookTime) {
+            if (time > 0) {
+                return true;
+            }
         }
-        progress = 0;
-        setChanged();
+        return false;
+    }
+
+    private ItemStack bakeResult(SimpleMachineRecipe recipe, ItemStack input) {
+        // Older saves could hold a whole stack in one slot; bake all of it rather than losing items.
+        int amount = Math.max(1, input.getCount());
+        if (recipe.getMaxTemperature() >= 0 && ovenTemperature > recipe.getMaxTemperature()) {
+            return new ItemStack(Items.CHARCOAL, Math.min(64, amount));
+        }
+        ItemStack result = recipe.getResultItem(level.registryAccess()).copy();
+        result.setCount(Math.min(result.getMaxStackSize(), Math.max(1, result.getCount()) * amount));
+        if (recipe.getPerfectTemperature() >= 0 && ovenTemperature == recipe.getPerfectTemperature()) {
+            addLore(result, "tooltips.bakeries.pile_item_perfect");
+        }
+        return result;
+    }
+
+    private SimpleMachineRecipe findOvenRecipeFor(ItemStack input) {
+        if (level == null || input.isEmpty()) {
+            return null;
+        }
+        for (SimpleMachineRecipe recipe : level.getRecipeManager().getAllRecipesFor(BakeriesRecipeTypes.OVEN)) {
+            if (recipe.getIngredient().test(input)) {
+                return recipe;
+            }
+        }
+        return null;
+    }
+
+    /** Baking progress of one oven slot, 0-100. */
+    public int getOvenSlotPercent(int slot) {
+        if (slot < 0 || slot >= OVEN_SLOTS || ovenCookMax[slot] <= 0) {
+            return 0;
+        }
+        return Math.min(100, ovenCookTime[slot] * 100 / ovenCookMax[slot]);
     }
 
     private void tickRecipeAcrossInputs() {
@@ -541,10 +704,14 @@ public class MachineBlockEntity extends BlockEntity implements ImplementedInvent
     }
 
     private static void addPerfectFermentationLore(ItemStack stack) {
+        addLore(stack, "tooltips.bakeries.perfect_fermentation");
+    }
+
+    private static void addLore(ItemStack stack, String translationKey) {
         CompoundTag display = stack.getOrCreateTagElement("display");
         ListTag lore = display.getList("Lore", net.minecraft.nbt.Tag.TAG_STRING);
         String tooltip = Component.Serializer.toJson(
-                Component.translatable("tooltips.bakeries.perfect_fermentation").withStyle(ChatFormatting.LIGHT_PURPLE)
+                Component.translatable(translationKey).withStyle(ChatFormatting.LIGHT_PURPLE)
         );
         StringTag tooltipTag = StringTag.valueOf(tooltip);
         if (!lore.contains(tooltipTag)) {
@@ -627,33 +794,6 @@ public class MachineBlockEntity extends BlockEntity implements ImplementedInvent
         return null;
     }
 
-    private OvenMatch findOvenRecipe() {
-        Level currentLevel = level;
-        if (currentLevel == null) {
-            return null;
-        }
-        ItemStack input = getItem(0);
-        if (input.isEmpty()) {
-            return null;
-        }
-        for (SimpleMachineRecipe recipe : currentLevel.getRecipeManager().getAllRecipesFor(BakeriesRecipeTypes.OVEN)) {
-            if (!recipe.getIngredient().test(input)) {
-                continue;
-            }
-            int min = recipe.getMinTemperature();
-            int max = recipe.getMaxTemperature();
-            if (min >= 0 && ovenTemperature < min) {
-                continue;
-            }
-            boolean burnt = max >= 0 && ovenTemperature > max;
-            ItemStack crafted = burnt ? new ItemStack(Items.CHARCOAL) : recipe.getResultItem(currentLevel.registryAccess());
-            if (canOutput(getItem(5), crafted)) {
-                return new OvenMatch(recipe, burnt);
-            }
-        }
-        return null;
-    }
-
     private void craftOnce(int inputSlot, int outputSlot, SimpleMachineRecipe recipe) {
         Level currentLevel = level;
         if (currentLevel == null) {
@@ -671,22 +811,6 @@ public class MachineBlockEntity extends BlockEntity implements ImplementedInvent
         } else {
             output.grow(crafted.getCount());
             this.setItem(outputSlot, output);
-        }
-    }
-
-    private void craftOvenCharcoal(SimpleMachineRecipe recipe) {
-        ItemStack input = getItem(0);
-        ItemStack output = getItem(5);
-        ItemStack crafted = new ItemStack(Items.CHARCOAL);
-        if (input.isEmpty() || !recipe.getIngredient().test(input) || !canOutput(output, crafted)) {
-            return;
-        }
-        input.shrink(1);
-        if (output.isEmpty()) {
-            setItem(5, crafted);
-        } else {
-            output.grow(crafted.getCount());
-            setItem(5, output);
         }
     }
 
@@ -916,8 +1040,5 @@ public class MachineBlockEntity extends BlockEntity implements ImplementedInvent
     }
 
     private record BlenderMatch(List<Integer> inputSlots, SimpleMachineRecipe recipe) {
-    }
-
-    private record OvenMatch(SimpleMachineRecipe recipe, boolean burnt) {
     }
 }

@@ -1,0 +1,18 @@
+{
+  "type": "bakeries:blender",
+  "ingredients": [
+    {
+      "item": "bakeries:foamed_protein_bucket"
+    },
+    {
+      "item": "bakeries:egg_yolk_paste_bucket"
+    }
+  ],
+  "result": {
+    "item": "bakeries:cake_paste_bucket",
+    "count": 1
+  },
+  "container": {
+    "item": "minecraft:bucket"
+  }
+}

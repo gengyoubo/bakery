@@ -231,18 +231,10 @@ public final class StateBlocks {
         }
     }
 
-    public static class RackBlock extends FacingBlock {
-        public static final EnumProperty<RackType> TYPE = EnumProperty.create("type", RackType.class);
-
+    /** Bread rack, glass bread rack and coffee table: connect with neighbours of the same block. */
+    public static class RackBlock extends HorizontalConnectBlock {
         public RackBlock(BlockBehaviour.Properties properties) {
             super(properties);
-            this.registerDefaultState(this.defaultBlockState().setValue(TYPE, RackType.SINGLE));
-        }
-
-        @Override
-        protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-            super.createBlockStateDefinition(builder);
-            builder.add(TYPE);
         }
     }
 
@@ -551,35 +543,33 @@ public final class StateBlocks {
     }
 
     public static class MouldBlock extends FacingBlock {
-        private static final VoxelShape SHAPE_NORTH = Block.box(1, 0, 1, 15, 3, 15);
-        private static final VoxelShape SHAPE_SOUTH = Block.box(1, 0, 1, 15, 3, 15);
-        private static final VoxelShape SHAPE_EAST = Block.box(1, 0, 1, 15, 3, 15);
-        private static final VoxelShape SHAPE_WEST = Block.box(1, 0, 1, 15, 3, 15);
+        private final VoxelShape shape;
 
         public MouldBlock(BlockBehaviour.Properties properties) {
+            this(properties, Block.box(1, 0, 1, 15, 3, 15));
+        }
+
+        public MouldBlock(BlockBehaviour.Properties properties, VoxelShape shape) {
             super(properties.sound(SoundType.METAL));
+            this.shape = shape;
+        }
+
+        /** Forge: right-clicking an empty mould picks it back up. */
+        @Override
+        @SuppressWarnings("deprecation")
+        public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+            if (!level.isClientSide) {
+                com.renyigesai.bakeries.utils.ItemUtils.givePlayerItem(player, new ItemStack(this.asItem()));
+                level.playSound(null, pos, net.minecraft.sounds.SoundEvents.METAL_BREAK, net.minecraft.sounds.SoundSource.PLAYERS, 0.8F, 0.8F);
+                level.removeBlock(pos, false);
+            }
+            return InteractionResult.sidedSuccess(level.isClientSide);
         }
 
         @Override
         @SuppressWarnings("deprecation")
         public @NotNull VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-            return switch (state.getValue(FACING)) {
-                case SOUTH -> SHAPE_SOUTH;
-                case EAST -> SHAPE_EAST;
-                case WEST -> SHAPE_WEST;
-                default -> SHAPE_NORTH;
-            };
-        }
-
-        @Override
-        @SuppressWarnings("deprecation")
-        public @NotNull VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-            return switch (state.getValue(FACING)) {
-                case SOUTH -> SHAPE_SOUTH;
-                case EAST -> SHAPE_EAST;
-                case WEST -> SHAPE_WEST;
-                default -> SHAPE_NORTH;
-            };
+            return shape;
         }
     }
 
@@ -639,6 +629,60 @@ public final class StateBlocks {
                 return state.setValue(PILE, maxPile);
             }
             return super.updateShape(state, facing, facingState, level, currentPos, facingPos);
+        }
+
+        public int getMaxPile() {
+            return maxPile;
+        }
+
+        /**
+         * Forge pile behaviour: right-click with the same item to stack one more (up to the max pile),
+         * right-click with an empty hand to take one back. Holding the auxiliary key skips taking.
+         */
+        @Override
+        @SuppressWarnings("deprecation")
+        public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+            ItemStack held = player.getItemInHand(hand);
+            int pile = state.getValue(PILE);
+            if (!held.isEmpty() && held.is(this.asItem())) {
+                if (!canStack(state) || pile >= maxPile) {
+                    return InteractionResult.PASS;
+                }
+                if (!level.isClientSide) {
+                    level.setBlock(pos, state.setValue(PILE, pile + 1), 3);
+                    level.playSound(null, pos, this.soundType.getPlaceSound(), net.minecraft.sounds.SoundSource.PLAYERS, 0.8F, 0.8F);
+                    if (!player.getAbilities().instabuild) {
+                        held.shrink(1);
+                    }
+                }
+                return InteractionResult.sidedSuccess(level.isClientSide);
+            }
+            if (held.isEmpty() && !PlayerKeyAuxiliary.isKeyDown(player.getUUID())) {
+                if (!level.isClientSide) {
+                    takeOne(state, level, pos, player);
+                }
+                return InteractionResult.sidedSuccess(level.isClientSide);
+            }
+            return InteractionResult.PASS;
+        }
+
+        protected boolean canStack(BlockState state) {
+            return true;
+        }
+
+        protected ItemStack takenItem(BlockState state) {
+            return new ItemStack(this.asItem());
+        }
+
+        protected void takeOne(BlockState state, Level level, BlockPos pos, Player player) {
+            int pile = state.getValue(PILE);
+            if (pile <= 1) {
+                level.removeBlock(pos, false);
+            } else {
+                level.setBlock(pos, state.setValue(PILE, pile - 1), 3);
+            }
+            com.renyigesai.bakeries.utils.ItemUtils.givePlayerItem(player, takenItem(state));
+            level.playSound(null, pos, net.minecraft.sounds.SoundEvents.ITEM_FRAME_REMOVE_ITEM, net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.0F);
         }
     }
 

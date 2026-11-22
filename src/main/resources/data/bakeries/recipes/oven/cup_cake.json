@@ -1,0 +1,14 @@
+{
+  "type": "bakeries:oven",
+  "ingredient": {
+    "item": "bakeries:paper_cup_cake_paste"
+  },
+  "result": {
+    "item": "bakeries:cup_cake",
+    "count": 1
+  },
+  "min": 160,
+  "max": 190,
+  "perfect": 180,
+  "time": 200
+}

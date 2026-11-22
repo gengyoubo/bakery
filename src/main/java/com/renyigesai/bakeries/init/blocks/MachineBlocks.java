@@ -122,8 +122,11 @@ public final class MachineBlocks {
                     }
                     return InteractionResult.CONSUME;
                 }
+                // Forge: one open sound per opening, played on the server for everyone nearby.
                 if (state.is(BakeriesBlocks.OVEN)) {
                     level.playSound(null, pos, BakeriesSounds.OVEN_OPEN, SoundSource.BLOCKS, 1.0F, 1.0F);
+                } else if (state.is(BakeriesBlocks.BLENDER) || state.is(BakeriesBlocks.FERMENTATION_BOX)) {
+                    level.playSound(null, pos, SoundEvents.IRON_TRAPDOOR_OPEN, SoundSource.BLOCKS, 1.0F, 1.0F);
                 }
                 serverPlayer.openMenu(provider);
             }

@@ -1,0 +1,13 @@
+{
+  "type": "bakeries:oven",
+  "ingredient": {
+    "item": "bakeries:mould_red_velvet_cake_paste"
+  },
+  "result": {
+    "item": "bakeries:mould_red_velvet_cake",
+    "count": 1
+  },
+  "min": 170,
+  "max": 180,
+  "time": 300
+}
