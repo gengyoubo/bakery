@@ -34,6 +34,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.resources.ResourceKey;
@@ -62,6 +63,21 @@ public final class BakeriesItems {
     // Ported from Forge 1.3.6: stone kiln + pizza
     public static final Item STONE_KILN, STONE_KILN_SHOVEL, PIZZA_FLATBREAD, RAW_PIZZA, PIZZA, SAUSAGE_PIZZA, MEAT_PASTE_PIZZA, CUSTOM_PIZZA, RAW_CUSTOM_PIZZA;
     public static final Item RAW_MOONCAKE, MOONCAKE, RAW_PORK_MOONCAKE, PORK_MOONCAKE, RAW_YUNTUI_MOONCAKE, YUNTUI_MOONCAKE, TRAY_YUNTUI_MOONCAKE;
+    public static final Item SALT_WATER_BUCKET, SALT_BUCKET, SALT_SCRAPER_RAKE, BAYSALT_FRAME, FERMENTATION_BARREL,
+            CHANDELIER, LUMINOUS_LIGHT_SIGN, LIGHT_BOX, MAGNETIC_PLATE, GLASS_CABINET_DOOR_TWO;
+    static {
+        SALT_WATER_BUCKET = register("salt_water_bucket", new BucketItem(BakeriesFluids.SALT_WATER,
+                new Item.Properties().stacksTo(1).craftRemainder(Items.BUCKET)));
+        SALT_BUCKET = register("salt_bucket", new Item(new Item.Properties().stacksTo(16).craftRemainder(Items.BUCKET)));
+        SALT_SCRAPER_RAKE = register("salt_scraper_rake", new Item(new Item.Properties()));
+        BAYSALT_FRAME = registerBlock("baysalt_frame", BakeriesBlocks.BAYSALT_FRAME);
+        FERMENTATION_BARREL = registerBlock("fermentation_barrel", BakeriesBlocks.FERMENTATION_BARREL);
+        CHANDELIER = registerBlock("chandelier", BakeriesBlocks.CHANDELIER);
+        LUMINOUS_LIGHT_SIGN = registerBlock("luminous_light_sign", BakeriesBlocks.LUMINOUS_LIGHT_SIGN);
+        LIGHT_BOX = registerBlock("light_box", BakeriesBlocks.LIGHT_BOX);
+        MAGNETIC_PLATE = registerBlock("magnetic_plate", BakeriesBlocks.MAGNETIC_PLATE);
+        GLASS_CABINET_DOOR_TWO = registerBlock("glass_cabinet_door_two", BakeriesBlocks.GLASS_CABINET_DOOR_TWO);
+    }
     static {
         BREAD_KNIFE = register("bread_knife", new BreadKnifeItem(new Item.Properties().durability(250)));
         BAKING_GUIDE = register("baking_guide", new BreadKnifeItem(new Item.Properties().durability(250)));
@@ -455,7 +471,10 @@ public final class BakeriesItems {
 
                 STONE_KILN, STONE_KILN_SHOVEL, PIZZA_FLATBREAD, RAW_PIZZA, RAW_CUSTOM_PIZZA, PIZZA, SAUSAGE_PIZZA, MEAT_PASTE_PIZZA, CUSTOM_PIZZA,
 
-                RAW_MOONCAKE, MOONCAKE, RAW_PORK_MOONCAKE, PORK_MOONCAKE, RAW_YUNTUI_MOONCAKE, YUNTUI_MOONCAKE, TRAY_YUNTUI_MOONCAKE
+                RAW_MOONCAKE, MOONCAKE, RAW_PORK_MOONCAKE, PORK_MOONCAKE, RAW_YUNTUI_MOONCAKE, YUNTUI_MOONCAKE, TRAY_YUNTUI_MOONCAKE,
+
+                SALT_WATER_BUCKET, SALT_BUCKET, SALT_SCRAPER_RAKE, BAYSALT_FRAME, FERMENTATION_BARREL,
+                CHANDELIER, LUMINOUS_LIGHT_SIGN, LIGHT_BOX, MAGNETIC_PLATE, GLASS_CABINET_DOOR_TWO
         };
     }
 

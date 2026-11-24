@@ -3,6 +3,11 @@ package com.renyigesai.bakeries.init;
 import com.renyigesai.bakeries.common.cake.CakeBoxBlockEntity;
 import com.renyigesai.bakeries.common.cake.CakeRollProcessingBlockEntity;
 import com.renyigesai.bakeries.common.cake.CustomCakeBlockEntity;
+import com.renyigesai.bakeries.common.decoration.LightBoxBlockEntity;
+import com.renyigesai.bakeries.common.decoration.LuminousLightSignBlockEntity;
+import com.renyigesai.bakeries.common.decoration.MagneticPlateBlockEntity;
+import com.renyigesai.bakeries.common.fermentation.FermentationBarrelBlockEntity;
+import com.renyigesai.bakeries.common.saltframe.BaysaltFrameBlockEntity;
 import com.renyigesai.bakeries.BakeriesMod;
 import com.renyigesai.bakeries.block.entity.MachineBlockEntity;
 import net.minecraft.core.Registry;
@@ -45,6 +50,17 @@ public final class BakeriesBlockEntities {
 
     public static final BlockEntityType<com.renyigesai.bakeries.common.mooncake.MooncakeBlockEntity> MOONCAKE = register("mooncake",
             BlockEntityType.Builder.of(com.renyigesai.bakeries.common.mooncake.MooncakeBlockEntity::new, BakeriesBlocks.MOONCAKE));
+
+    public static final BlockEntityType<BaysaltFrameBlockEntity> BAYSALT_FRAME = register("baysalt_frame",
+            BlockEntityType.Builder.of(BaysaltFrameBlockEntity::new, BakeriesBlocks.BAYSALT_FRAME));
+    public static final BlockEntityType<FermentationBarrelBlockEntity> FERMENTATION_BARREL = register("fermentation_barrel",
+            BlockEntityType.Builder.of(FermentationBarrelBlockEntity::new, BakeriesBlocks.FERMENTATION_BARREL));
+    public static final BlockEntityType<LuminousLightSignBlockEntity> LUMINOUS_LIGHT_SIGN = register("luminous_light_sign",
+            BlockEntityType.Builder.of(LuminousLightSignBlockEntity::new, BakeriesBlocks.LUMINOUS_LIGHT_SIGN));
+    public static final BlockEntityType<LightBoxBlockEntity> LIGHT_BOX = register("light_box",
+            BlockEntityType.Builder.of(LightBoxBlockEntity::new, BakeriesBlocks.LIGHT_BOX));
+    public static final BlockEntityType<MagneticPlateBlockEntity> MAGNETIC_PLATE = register("magnetic_plate",
+            BlockEntityType.Builder.of(MagneticPlateBlockEntity::new, BakeriesBlocks.MAGNETIC_PLATE));
 
     private static <T extends net.minecraft.world.level.block.entity.BlockEntity> BlockEntityType<T> register(String id, BlockEntityType.Builder<T> builder) {
         return Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, new ResourceLocation(BakeriesMod.MODID, id), builder.build(null));

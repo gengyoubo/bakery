@@ -1,0 +1,24 @@
+{
+  "type": "bakeries:fermentation",
+  "ingredients": [
+    {
+      "tag": "c:flour"
+    },
+    {
+      "tag": "c:flour"
+    },
+    {
+      "tag": "c:flour"
+    },
+    {
+      "item": "minecraft:water_bucket"
+    }
+  ],
+  "container": {
+    "item": "minecraft:glass_bottle"
+  },
+  "output": {
+    "item": "bakeries:bottle_yeast",
+    "count": 1
+  }
+}

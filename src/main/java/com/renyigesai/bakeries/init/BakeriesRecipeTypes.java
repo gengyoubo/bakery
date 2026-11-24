@@ -4,6 +4,7 @@ import com.renyigesai.bakeries.BakeriesMod;
 import com.renyigesai.bakeries.recipe.BlenderRecipe;
 import com.renyigesai.bakeries.recipe.BreadKnifeRecipe;
 import com.renyigesai.bakeries.recipe.CoffeeRecipe;
+import com.renyigesai.bakeries.recipe.FermentationRecipe;
 import com.renyigesai.bakeries.recipe.SimpleMachineRecipe;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -20,6 +21,7 @@ public final class BakeriesRecipeTypes {
     private static final ResourceLocation FLOUR_SIEVE_ID = new ResourceLocation(BakeriesMod.MODID, "flour_sieve");
     private static final ResourceLocation COFFEE_ID = new ResourceLocation(BakeriesMod.MODID, "coffee");
     private static final ResourceLocation FERMENTATION_BOX_ID = new ResourceLocation(BakeriesMod.MODID, "fermentation_box");
+    private static final ResourceLocation FERMENTATION_ID = new ResourceLocation(BakeriesMod.MODID, "fermentation");
 
     public static final RecipeType<SimpleMachineRecipe> OVEN = registerType("oven");
     public static final RecipeType<SimpleMachineRecipe> BLENDER = registerType("blender");
@@ -28,6 +30,7 @@ public final class BakeriesRecipeTypes {
     public static final RecipeType<SimpleMachineRecipe> FLOUR_SIEVE = registerType("flour_sieve");
     public static final RecipeType<CoffeeRecipe> COFFEE = registerType("coffee");
     public static final RecipeType<SimpleMachineRecipe> FERMENTATION_BOX = registerType("fermentation_box");
+    public static final RecipeType<FermentationRecipe> FERMENTATION = registerType("fermentation");
     public static final RecipeType<com.renyigesai.bakeries.recipe.StoneKilnRecipe> STONE_KILN = registerType("stone_kiln");
 
     public static final RecipeSerializer<SimpleMachineRecipe> OVEN_SERIALIZER = registerSerializer("oven",
@@ -57,6 +60,9 @@ public final class BakeriesRecipeTypes {
 
     public static final RecipeSerializer<com.renyigesai.bakeries.recipe.StoneKilnRecipe> STONE_KILN_SERIALIZER = registerSerializer("stone_kiln",
             new com.renyigesai.bakeries.recipe.StoneKilnRecipe.Serializer());
+
+    public static final RecipeSerializer<FermentationRecipe> FERMENTATION_SERIALIZER = registerSerializer("fermentation",
+            new FermentationRecipe.Serializer());
 
     public static final RecipeSerializer<com.renyigesai.bakeries.recipe.MooncakeRecipe> MOONCAKE_SERIALIZER = registerSerializer("mooncake",
             new net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer<>(com.renyigesai.bakeries.recipe.MooncakeRecipe::new));

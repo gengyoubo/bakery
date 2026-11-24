@@ -7,6 +7,13 @@ import com.renyigesai.bakeries.common.cake.CakeBoxBlock;
 import com.renyigesai.bakeries.common.cake.CakeRollProcessingBlock;
 import com.renyigesai.bakeries.common.cake.CustomCakeBlock;
 import com.renyigesai.bakeries.common.cake.SiliconePaperBlock;
+import com.renyigesai.bakeries.common.decoration.GlassCabinetDoorTwoBlock;
+import com.renyigesai.bakeries.common.decoration.LightBoxBlock;
+import com.renyigesai.bakeries.common.decoration.LuminousLightSignBlock;
+import com.renyigesai.bakeries.common.decoration.MagneticPlateBlock;
+import com.renyigesai.bakeries.common.fermentation.FermentationBarrelBlock;
+import com.renyigesai.bakeries.common.fluid.SaltWaterFluidBlock;
+import com.renyigesai.bakeries.common.saltframe.BaysaltFrameBlock;
 import com.renyigesai.bakeries.init.blocks.FoodBlocks;
 import com.renyigesai.bakeries.init.blocks.MachineBlocks;
 import com.renyigesai.bakeries.init.blocks.StateBlocks;
@@ -16,6 +23,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DropExperienceBlock;
+import net.minecraft.world.level.block.LanternBlock;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.level.material.PushReaction;
@@ -57,7 +65,23 @@ public final class BakeriesBlocks {
     // Ported from Forge 1.3.6: stone kiln + pizza
     public static final Block STONE_KILN, PIZZA_FLATBREAD, RAW_PIZZA, PIZZA, SAUSAGE_PIZZA, MEAT_PASTE_PIZZA, CUSTOM_PIZZA;
     public static final Block MOONCAKE, PORK_MOONCAKE, YUNTUI_MOONCAKE, TRAY_YUNTUI_MOONCAKE;
+    public static final Block BAYSALT_FRAME, SALT_WATER_BLOCK, CHANDELIER, LUMINOUS_LIGHT_SIGN, LIGHT_BOX, MAGNETIC_PLATE,
+            GLASS_CABINET_DOOR_TWO, MIX_BREAD_BLOCK, FERMENTATION_BARREL;
     static {
+        SALT_WATER_BLOCK = register("salt_water_block", new SaltWaterFluidBlock());
+        BAYSALT_FRAME = register("baysalt_frame", new BaysaltFrameBlock(BlockBehaviour.Properties.of()
+                .sound(SoundType.WOOD).strength(1.0F, 10.0F).noOcclusion()
+                .isRedstoneConductor((state, level, pos) -> false)));
+        FERMENTATION_BARREL = register("fermentation_barrel", new FermentationBarrelBlock(BlockBehaviour.Properties.copy(Blocks.BARREL)));
+        CHANDELIER = register("chandelier", new LanternBlock(BlockBehaviour.Properties.copy(Blocks.LANTERN)));
+        LUMINOUS_LIGHT_SIGN = register("luminous_light_sign", new LuminousLightSignBlock(BlockBehaviour.Properties.copy(Blocks.GLASS)
+                .lightLevel(state -> 15).noOcclusion()));
+        LIGHT_BOX = register("light_box", new LightBoxBlock(BlockBehaviour.Properties.copy(Blocks.GLASS)
+                .lightLevel(state -> 15).noOcclusion()));
+        MAGNETIC_PLATE = register("magnetic_plate", new MagneticPlateBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).noOcclusion()));
+        GLASS_CABINET_DOOR_TWO = register("glass_cabinet_door_two", new GlassCabinetDoorTwoBlock(BlockBehaviour.Properties.copy(Blocks.GLASS).noOcclusion()));
+        MIX_BREAD_BLOCK = register("mix_bread_block", new Block(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS).strength(0.5F, 0.5F).noOcclusion()));
+
         CAKE_BASE = register("cake_base", cake(5, 0.4F));
         RED_VELVET_CAKE_BASE = register("red_velvet_cake_base", cake(5, 0.4F));
         MULTI_LAYER_CREAM_CAKE = register("multi_layer_cream_cake", new FoodBlocks.MultiLayerCreamCakeBlock(cakeProperties(), () -> BakeriesItems.CREAM_CAKE_CUBE));

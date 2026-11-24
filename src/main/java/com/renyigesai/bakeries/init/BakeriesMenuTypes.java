@@ -4,6 +4,7 @@ import com.renyigesai.bakeries.BakeriesMod;
 import com.renyigesai.bakeries.menu.BlenderMenu;
 import com.renyigesai.bakeries.menu.CupboardMenu;
 import com.renyigesai.bakeries.menu.DoughCraftingTableMenu;
+import com.renyigesai.bakeries.menu.FermentationBarrelMenu;
 import com.renyigesai.bakeries.menu.FermentationBoxMenu;
 import com.renyigesai.bakeries.menu.OvenMenu;
 import net.minecraft.core.Registry;
@@ -37,6 +38,11 @@ public final class BakeriesMenuTypes {
             BuiltInRegistries.MENU,
             new ResourceLocation(BakeriesMod.MODID, "cupboard"),
             new MenuType<>(CupboardMenu::new, FeatureFlags.DEFAULT_FLAGS)
+    );
+    public static final MenuType<FermentationBarrelMenu> FERMENTATION_BARREL = Registry.register(
+            BuiltInRegistries.MENU,
+            new ResourceLocation(BakeriesMod.MODID, "fermentation_barrel"),
+            new MenuType<>(FermentationBarrelMenu::new, FeatureFlags.DEFAULT_FLAGS)
     );
 
     private BakeriesMenuTypes() {

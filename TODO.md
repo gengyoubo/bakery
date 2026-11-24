@@ -1,7 +1,7 @@
 # Bakeries Fabric 移植 TODO
 
 对照基准：`bakeries-1.20.1-forge-1.3.6.jar`（Forge 1.3.6）。
-最后更新：2026-11-22（石窑和披萨完成后）。
+最后更新：2026-11-22（晒盐、发酵桶和装饰方块完成后）。
 
 ## 已完成（这一轮移植里做过的，供参考）
 
@@ -23,7 +23,7 @@
 - [x] 食物堆叠：手持同种物品右键叠高、空手右键取回（所有堆叠方块）
 - [x] 占位贴图：粗盐、抹茶蛋糕面糊、南瓜馅（Forge jar 里也没有，等正式美术替换同名 png）
 
-## 1. 还没移植的内容（约 20 个注册 ID）
+## 1. 已补齐但未进游戏验证的内容（原剩余的注册 ID）
 
 ### 月饼（代码已完成，编译通过；还没跑 gametest，也没进游戏看过）
 - [x] `raw_mooncake`、`mooncake`、`raw_pork_mooncake`、`pork_mooncake`、`raw_yuntui_mooncake`、`yuntui_mooncake`、`tray_yuntui_mooncake`
@@ -31,16 +31,28 @@
 - [ ] 待验证：合成、烘烤保留馅料、吃月饼触发馅料效果、叠放/取回、送给其他玩家
 - 注：`tray_yuntui_mooncake` 在 Forge 里既没有配方也没有掉落表，Fabric 给它加了掉落自身，并像 `tray_scone` 一样合成后返还木托盘
 
-### 晒盐
-- [ ] `baysalt_frame`、`salt_water_bucket`（盐水流体）、`salt_bucket`、`salt_scraper_rake`
-- [ ] 粗盐块 / 盐桶相关配方（`raw_salt_block.json`、`salt_bucket.json`）
+### 晒盐（已完成）
+- [x] `baysalt_frame`（盐水流体槽、白天露天晒盐、盐满 10 份可用刮盐耙取盐）
+- [x] `salt_water` / `flowing_salt_water` 流体 + `salt_water_block` + 客户端流体渲染与动画贴图
+- [x] `salt_water_bucket`、`salt_bucket`、`salt_scraper_rake`
+- [x] 配方：`salt_water_bucket` 熔炼成 `salt_bucket`，`salt_bucket` 无序合成 `raw_salt_block`
+- [x] 盐水放在点燃的熔炉/营火上方会随机变成粗盐块
+- 注：Fabric 流水不会无限造源（`canConvertToSource` 关闭），避免盐水无限刷盐
 
-### 发酵桶
-- [ ] `fermentation_barrel` 方块 + 菜单/界面
-- [ ] 配方类型 `bakeries:fermentation`（酵母瓶、干酪块、鲜奶酪块）
+### 发酵桶（已完成）
+- [x] `fermentation_barrel` 方块 + 9 格容器 + 菜单/界面 + 进度同步
+- [x] 配方类型 `bakeries:fermentation`（无序多原料、可选容器返还、结果暂存在内部槽）
+- [x] 配方：酵母瓶、干酪块、鲜奶酪块（使用 `c:flour`、`c:milk`、`c:salt` 标签）
+- 注：配方可选的容器会显示在内部容器槽，成品自动转到可见输出槽（Forge 原逻辑在带容器配方时不会转出，这里已修正）
 
-### 装饰方块
-- [ ] `chandelier`、`luminous_light_sign`（也要接入左右连接）、`light_box`、`magnetic_plate`、`glass_cabinet_door_two`、`mix_bread_block`、`bag`
+### 装饰方块（已完成）
+- [x] `chandelier`（灯，直接使用 `LanternBlock`）
+- [x] `luminous_light_sign`（左右连接、命名牌写字、染料改色、空文字显示时间）
+- [x] `light_box`（命名牌写字、染料改色）
+- [x] `magnetic_plate`（墙面挂板、放/取小物品、放方块记录方块 ID）
+- [x] `glass_cabinet_door_two`（单格玻璃柜门，右键开关）
+- [x] `mix_bread_block`（Forge 里没有物品，仅注册方块，外观沿用圆面包模型）
+- 注：`magnetic_plate` 目前只渲染挂上去的物品，不把目标方块纹理重贴到挂板上；`bag` 在 Forge jar 里只有模型没有注册，未移植
 
 ## 2. 和 Forge 行为不一致
 
@@ -59,7 +71,7 @@
 ## 3. 客户端与联动
 
 - [ ] 方块实体渲染器：面包架、玻璃面包架、烤箱、木托盘、搅拌机、醒发箱等（已有：摩卡壶、自定义蛋糕、蛋糕卷加工、蛋糕盒）
-- [ ] JEI：缺石窑、拆模两个分类（石窑配方类型已经有了）
+- [ ] JEI：缺石窑、拆模、发酵桶三个分类（石窑/发酵配方类型已经有了）
 - [ ] Jade 插件
 - [ ] 内置资源包：`b_2d_icon`、`b_gui`、`b_xiris`（目前只有 `b_16x`）
 - [ ] 结构：面包店 `bakery.nbt`
@@ -78,7 +90,7 @@
 - [ ] 部分文件混合了 LF/CRLF 换行（Git 会提示，不影响运行）
 - [ ] `.idea/modules/*.iml` 有 Gradle 同步产生的改动，提交时注意排除
 
-## 6. 待在客户端里确认（服务端测试已通过，但没进游戏看过）
+## 6. 待在客户端里确认（资源加载/服务器启动已通过，但没实际玩过）
 
 - [ ] 新物品/方块的模型和贴图显示
 - [ ] 烤箱每格进度条的位置
@@ -89,3 +101,7 @@
 - [ ] 自定义蛋糕（方块、物品、放进蛋糕盒）的部件模型渲染；蛋糕部件物品的"可用作蛋糕部件"提示
 - [ ] 蛋糕卷加工台上的食材显示、蛋糕盒里物品的显示位置
 - [ ] 石窑里物品的位置/变大/翻面动画、看向石窑时的进度条；饼底上配料和奶酪的摆放
+- [ ] 晒盐槽的三种外观（空/盐水/盐）、倒桶/取桶、刮盐；盐水流体流动和贴图动画
+- [ ] 发酵桶界面进度条、粒子效果，以及酵母瓶/奶酪配方实际加工
+- [ ] 发光灯牌/灯箱的文字与颜色渲染、时间显示；磁吸板物品摆放位置和旋转
+- [ ] 吊灯、玻璃柜门二、混合面包方块模型的实际观感

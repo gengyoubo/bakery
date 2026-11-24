@@ -1,0 +1,18 @@
+{
+  "type": "bakeries:fermentation",
+  "ingredients": [
+    {
+      "tag": "c:milk"
+    },
+    {
+      "tag": "c:salt"
+    },
+    {
+      "tag": "c:salt"
+    }
+  ],
+  "output": {
+    "item": "bakeries:cheese_cube",
+    "count": 4
+  }
+}

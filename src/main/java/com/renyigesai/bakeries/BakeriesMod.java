@@ -43,6 +43,7 @@ public final class BakeriesMod implements ModInitializer {
         BakeriesConfig.init();
         BakeriesSounds.init();
         BakeriesParticleTypes.init();
+        BakeriesFluids.init();
         BakeriesBlocks.init();
         BakeriesBlockEntities.init();
         BakeriesMenuTypes.init();
